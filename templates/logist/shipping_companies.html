@@ -1,0 +1,61 @@
+{% extends 'logist/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<h3 class="panel-title">Список логистических компаний</h3>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-12 text-right">
+									<form action="/logist/shipping/add">
+									<button type="submit" class="btn btn-info"><i class="fa fa-plus-square"></i> Добавить</button>
+									</form>
+								</div> 
+							</div>	<br>
+							<table class="table table-bordered table-striped">
+								<tr>
+									<th>
+									</th>
+									<th>
+										Компания
+									</th>
+									<th>
+										Информация
+									</th>
+									<th>
+										
+									</th>
+								</tr>
+							{% for i in companies %}
+							<tr>
+								<td>
+									{{forloop.counter}}
+								</td>
+								<td>
+									{{i.title}}
+								</td>
+								<td>
+									{{i.surname}}
+									{{i.first_name}}
+									{{i.middle_name}} <br>
+									{{i.email}} <br>
+									{{i.phone}} <br>
+									{{i.requisites}} 
+								</td>
+								<td>
+									<a href="/logist/shipping/delete/{{i.id}}">Удалить</a> 
+								</td>
+							</tr>
+							{% endfor %}
+							</table>
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

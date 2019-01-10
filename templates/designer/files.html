@@ -1,0 +1,25 @@
+{% extends 'designer/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">Загрузить</h3>
+								</div>
+								<div class="panel-body">
+									<form method="POST" enctype="multipart/form-data">
+										{% csrf_token %}
+ 										<b>Файл: </b> 
+										{{file_form.file}} <br>
+										<button type="submit" class="btn ctn-primary">Отправить</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+{%endblock%}

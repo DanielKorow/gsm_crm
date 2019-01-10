@@ -1,0 +1,124 @@
+{% extends 'manager/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<h3 class="panel-title">Страница добавления нового клиента в систему</h3>
+							<p class="panel-subtitle"> <a href="/manager/create_client/enterprise">Юридическое лицо</a> / <a href="/manager/create_client/individual">Физическое лицо</a></p>
+						</div>
+						<div class="panel-body">
+							{% if create_client_enterprise %}
+							<form method="POST">
+								{% csrf_token %}
+						<div class="row">
+							<div class="col-md-5">	
+								<div class="row create-personal-padding">
+								<div class="col-md-4">Фамилия:</div>
+								<div class="col-md-3 text-right">{{create_client_enterprise.surname}}</div>
+								<div class="col-md-5"></div>
+								</div>
+								<div class="row create-personal-padding">
+								<div class="col-md-4">Имя:</div>
+								<div class="col-md-3 text-right">{{create_client_enterprise.first_name}}</div>
+								<div class="col-md-5"></div>
+								</div>	
+								<div class="row create-personal-padding">
+								<div class="col-md-4">Отчество:</div>
+								<div class="col-md-3 text-right">{{create_client_enterprise.middle_name}}</div>
+								<div class="col-md-5"></div>
+								</div>
+								<div class="row create-personal-padding">
+								<div class="col-md-4">Название организации:</div>
+								<div class="col-md-3 text-right">{{create_client_enterprise.company_name}}</div>
+								<div class="col-md-5"></div>
+								</div>
+								<div class="row create-personal-padding">
+								<div class="col-md-4">Контактный email:</div>
+								<div class="col-md-3 text-right">{{create_client_enterprise.email}}</div>
+								<div class="col-md-5"></div>
+								</div>
+								<div class="row create-personal-padding">
+								<div class="col-md-4">Телефон:</div>
+								<div class="col-md-3 text-right">{{create_client_enterprise.phone}}</div>
+								<div class="col-md-5"></div>
+								</div>
+								<div class="row create-personal-padding">
+								<div class="col-md-4">Адрес доставки:</div>
+								<div class="col-md-8 text-right">{{create_client_enterprise.delivery_address}}</div>
+								
+								</div> <br>
+							</div>
+							<div class="col-md-5"> 
+								<div class="row create-personal-padding">
+								<div class="col-md-4">Реквезиты:</div>
+								<div class="col-md-8 text-right">{{create_client_enterprise.requisites}}</div>
+								</div>
+								<div class="row create-personal-padding">
+								<div class="col-md-4"></div>
+								<div class="col-md-4">Создать личный кабинет:</div>
+								<div class="col-md-4 text-right">{{create_client_enterprise.create_account}}</div>
+								</div> <br>
+								<div class="row create-personal-padding">
+								<div class="col-md-4"></div>
+								<div class="col-md-8 text-right">
+									<button type="submit" class="btn btn-success">Создать</button>
+								</div>
+								</div>	
+							</div>
+							<div class="col-md-2">
+								
+							</div>
+						</div>									
+							</form>
+							{% endif %}
+
+
+							{% if create_client_individual %}
+							<form method="POST">
+								{% csrf_token %}
+								<div class="row create-personal-padding">
+							<div class="col-md-2">Фамилия:</div>
+							<div class="col-md-2 text-right">{{create_client_individual.surname}}</div>
+							<div class="col-md-8"></div>
+							</div>
+							<div class="row create-personal-padding">
+							<div class="col-md-2">Имя:</div>
+							<div class="col-md-2 text-right">{{create_client_individual.first_name}}</div>
+							<div class="col-md-8"></div>
+							</div>	
+							<div class="row create-personal-padding">
+							<div class="col-md-2">Отчество:</div>
+							<div class="col-md-2 text-right">{{create_client_individual.middle_name}}</div>
+							<div class="col-md-8"></div>
+							</div>
+							<div class="row create-personal-padding">
+							<div class="col-md-2">Контактный email:</div>
+							<div class="col-md-2 text-right">{{create_client_individual.email}}</div>
+							<div class="col-md-8"></div>
+							</div> <br>
+							<div class="row create-personal-padding">
+							<div class="col-md-2">Создать личный кабинет:</div>
+							<div class="col-md-2 text-right">{{create_client_individual.create_account}}</div>
+							<div class="col-md-8"></div>
+							</div> <br>
+							<div class="row create-personal-padding">
+							<div class="col-md-2"></div>
+							<div class="col-md-2 text-right">
+								<button type="submit" class="btn btn-success">Создать</button>
+							</div>
+							<div class="col-md-8"></div>
+							</div>									
+							</form>
+							{% endif %}
+
+
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

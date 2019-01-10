@@ -1,0 +1,1 @@
+curl --cookie cookie.txt --insecure https://10.0.20.29/  -H "Content-Type: application/json" -H "X-CSRFToken: uYXbhdgelCxgGc207m2rR1Rb2NOunCaIGkhcDcUpo8TaZ9KpIuv3ufRTidoFpbYu" -X POST -d "csrfmiddlewaretoken=l1CRyN6VdoG9rHJwGChRN5ujdu01RprjxnWSUMK6gU23KErVhKKtqju1tUAcTYf5&username=korovenkovia&password=jmxga8vo" -c cookie.txt

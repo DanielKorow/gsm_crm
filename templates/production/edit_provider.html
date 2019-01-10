@@ -1,0 +1,113 @@
+{% extends 'production/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="panel panel-headline">	
+						<div class="panel-heading">
+							<h3 class="panel-title"> Заполните данные поставщика </h3>
+						</div>
+						<div class="panel-body">
+							<form method="POST">
+								{% csrf_token %}
+							<div class="row">
+								<div class="col-md-6">
+									<div class="row">
+									<div class="col-md-6">
+										Поставщик:
+									</div>
+									<div class="col-md-6">
+										 {{form.title}}
+									</div>
+									</div>
+									<div class="row">
+									<div class="col-md-6">
+										Фамилия:
+									</div>
+									<div class="col-md-6">
+										 {{form.surname}}
+									</div>
+									</div>
+									<div class="row">
+									<div class="col-md-6">
+										Имя:
+									</div>
+									<div class="col-md-6">
+										 {{form.first_name}}
+									</div>
+									</div>
+									<div class="row">
+									<div class="col-md-6">
+										Отчество:
+									</div>
+									<div class="col-md-6">
+										 {{form.middle_name}}
+									</div>
+									</div>
+									<div class="row">
+									<div class="col-md-6">
+										Email:
+									</div>
+									<div class="col-md-6">
+										 {{form.email}}
+									</div>
+									</div>
+									<div class="row">
+									<div class="col-md-6">
+										Телефон:
+									</div>
+									<div class="col-md-6">
+										 {{form.phone}}
+									</div>
+									</div>
+									<div class="row">
+									<div class="col-md-6">
+										Адрес:
+									</div>
+									<div class="col-md-6">
+										 {{form.address}}
+									</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="row">
+										<div class="col-md-2">Реквезиты: </div>
+										<div class="col-md-10"> {{form.requisites}}</div>
+									</div> <br>
+								</div>
+							</div> <br>
+							<div class="row text-right">
+								<div class="col-md-12">
+									<button type="submit" class="btn btn-success" name="save">Сохранить</button>
+								</div>
+							</div>
+							</form> <br>
+							<div class='row'>
+										<div class="col-md-6">
+											<b>Загрузить документ:</b> <br>
+											<form method="POST" enctype="multipart/form-data">
+												{% csrf_token %}
+													Название: {{doc_form.title}} <br>
+													Описание: {{doc_form.discription}} <br>
+													{{doc_form.file}} <br>
+													<button type='submit' class="btn btn-default" name='add_file'>Отправить</button>
+										</form> <br>
+										</div> 
+										<div class="col-md-6">
+											<b>Документы:</b> <br>
+											{% for i in docs%}
+											 {{i.title}}: <br>
+											 <i>{{i.discription}}</i> <br>
+											 <a href="{{i.file.url}}">{{i.file}}</a> <br>
+											{%endfor%}
+										</div>	
+							</div> <br>
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

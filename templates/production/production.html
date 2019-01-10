@@ -1,0 +1,18 @@
+{% extends 'production/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				{% for order in orders %}
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="panel panel-headline">	
+						<div class="panel-heading">
+							<h3 class="panel-title" style="cursor: pointer;" onclick="location.href='/designer/order/{{ order.id }}';"> Заказ № {{ order.id }} </h3>
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+				</div>
+				{% endfor %}
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

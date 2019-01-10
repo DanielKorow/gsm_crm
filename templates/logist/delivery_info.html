@@ -1,0 +1,49 @@
+{% extends 'logist/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					
+					<div class="row">
+						<div class="col-md-6">
+							<div class="panel panel-headline">
+								<div class="panel-heading">
+									<h3 class="panel-title">От кого:</h3>
+								</div>
+								<div class="panel-body">
+									<b>Поставщик: </b>{{position_info.provider.title}} <br>
+									<b>Контактное лицо: </b>{{position_info.provider.surname}} {{position_info.shipping_company.first_name}} {{position_info.provider.middle_name}} <br>
+									<b>Email: </b>{{position_info.provider.email}} <br>
+									<b>Телефон: </b>{{position_info.provider.phone}} <br>
+									{%autoescape off%}
+									<b>Реквизиты: </b>{{position_info.provider.requisites}} <br>
+									{%endautoescape%}
+									<b>Адрес отправки: </b>{{position_info.provider.address}} <br>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="panel panel-headline">
+								<div class="panel-heading">
+									<h3 class="panel-title">Кому:</h3>
+								</div>
+								<div class="panel-body">
+									<b>Клиент: </b>{{order_id.client.company}} <br>
+									<b>Контактное лицо: </b>{{order_id.client.surname}} {{order_id.client.first_name}} {{order_id.client.middle_name}} <br>
+									<b>Email: </b>{{order_id.client.email}} <br>
+									<b>Телефон: </b>{{order_id.client.phone}} <br>
+									{%autoescape off%}
+									<b>Реквизиты: </b>{{order_id.client.requisites}} <br>
+									{%endautoescape%}
+									<b>Адрес доставки: </b>{{order_id.client.delivery_address}} <br>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

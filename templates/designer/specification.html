@@ -1,0 +1,41 @@
+{% extends 'designer/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="panel panel-headline">	
+						<div class="panel-heading">
+							<b>Спецификация:</b> {{specification.name}}
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<dir class="col-md-1">
+									<b>Описание:</b>
+								</dir>
+								<dir class="col-md-3">
+									{{specification.specification}}
+								</dir>
+								<dir class="col-md-3"></dir>
+								<dir class="col-md-5"></dir>
+							</div>
+							{%if specification.picture%}
+							<div class="row">
+								<dir class="col-md-2">
+									<b>Прикреплённые файлы:</b>
+								</dir>
+								<dir class="col-md-3">
+									<a href="{{specification.picture.url}}">{{specification.picture}}</a> <br>
+								</dir>
+								<dir class="col-md-3"></dir>
+								<dir class="col-md-4"></dir>
+								 
+							</div>
+							{%endif%}
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

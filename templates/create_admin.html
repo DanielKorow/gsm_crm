@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create admin</title>
+</head>
+<body>
+	<form method="POST">
+		{% csrf_token %}
+ {{ create_form.as_p}}
+ <button type="submit">Создать</button>
+ 	</form>
+</body>
+</html>

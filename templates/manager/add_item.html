@@ -1,0 +1,45 @@
+{% extends 'manager/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<h3 class="panel-title">Страница добавления новой позиции в номенклатуру</h3>
+							<p class="panel-subtitle">Заполните все поля ниже</p>
+						</div>
+						<div class="panel-body">
+							<form method="POST" enctype="multipart/form-data">
+								{% csrf_token %}
+								<div class="row create-personal-padding">
+							<div class="col-md-2">Позиция:</div>
+							<div class="col-md-2 text-right">{{items_form.name}}</div>
+							<div class="col-md-8"></div>
+							</div>
+							<div class="row create-personal-padding">
+							<div class="col-md-2">Информация:</div>
+							<div class="col-md-2 text-right">{{items_form.info}}</div>
+							<div class="col-md-8"></div>
+							</div>
+							<div class="row create-personal-padding">
+							<div class="col-md-2">Фото:</div>
+							<div class="col-md-2 text-right">
+								{{items_form.photo}}
+							</div>
+							<div class="col-md-8"></div>
+							</div> <br>
+							<div class="col-md-2"></div>	
+							<div class="col-md-2 text-right">
+								<button type="submit" class="btn btn-success">Добавить</button>
+							</div>
+							<div class="col-md-8"></div>
+							</div>									
+							</form>
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

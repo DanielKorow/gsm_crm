@@ -1,0 +1,2 @@
+> ls -d mnndc01.n-novgorod.corp.local 
+[mnndc01.n-novgorod.corp.local]

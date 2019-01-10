@@ -1,0 +1,38 @@
+{% extends 'manager/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<h3 class="panel-title">Страница создания личного кабинета клиента</h3>
+							<p class="panel-subtitle">Заполните все поля ниже</p>
+						</div>
+						<div class="panel-body">
+							<form method="POST">
+								{% csrf_token %}
+								<div class="row create-personal-padding">
+							<div class="col-md-2">Email:</div>
+							<div class="col-md-2 text-right">{{create_client_account.email}}</div>
+							<div class="col-md-8"></div>
+							</div>
+							<div class="row create-personal-padding">
+							<div class="col-md-2">Пароль:</div>
+							<div class="col-md-2 text-right">{{create_client_account.password}}</div>
+							<div class="col-md-8"></div>
+							</div> <br>
+							<div class="col-md-2"></div>	
+							<div class="col-md-2 text-right">
+								<button type="submit" class="btn btn-success">Создать</button>
+							</div>
+							<div class="col-md-8"></div>
+							</div>									
+							</form>
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

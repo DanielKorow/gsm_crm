@@ -1,0 +1,115 @@
+{% extends 'production/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-headline">
+								<div class="panel-heading">
+									<h3 class="panel-title">Заказ № {{order_id.id}}</h3>
+								</div>
+								<div class="panel-body">
+									<form method="POST">
+										{{formset.management_form}}
+										{% csrf_token %}
+											<table class="table table-striped table-bordered table-hover">
+												<tr>
+													<th>
+														№
+													</th>
+													<th>
+														Позиция
+													</th>
+<!-- 													<th>
+														Размер
+													</th> -->
+													<th>
+														Метод нанесения
+													</th>
+													<th>
+														Материал
+													</th>
+													<th>
+														Количество
+													</th>
+													<th>
+														Цена
+													</th>
+													<th>
+														Цена закупки, руб.
+													</th>
+													<th>
+														Поставщик
+													</th>
+													<th>
+														Предоплата поставщику
+													</th>
+													<th>
+														Готовность на производстве
+													</th>
+													<th>
+														Продакшн статус
+													</th>
+													<th>Тех. задание</th>
+													<th>Тех. требования</th>
+												</tr>
+												{% for i in order%}
+												<tr>
+													<td>
+														{{ forloop.counter}}
+													</td>
+													<td>
+														{{i.item}}
+													</td>
+<!-- 													<td>
+														{{i.size}}
+													</td> -->
+													<td>
+														{{i.provider.app_method}}
+													</td>
+													<td>
+														{{i.provider.material}}
+													</td>
+													<td>
+														{{i.quantity}}
+													</td>
+													<td>
+														{{i.price}} руб.
+													</td>
+													<td>
+														{{i.provider.production_purchase_price}}
+													</td>
+													<td>
+														{{i.provider.id}}
+														{{i.provider.provider}}
+													</td>
+													<td>
+														{{i.provider.provider_pre_payment}}
+													</td>
+													<td>
+														{{i.provider.production_est_date}}
+													</td>
+													<td>
+														{{i.provider.production_status}}
+													</td>
+													<td>{{i.provider.design_requirements}}</td>
+													<td>{{i.provider.design_specification}}</td>
+												</tr>
+												{% endfor %}
+											</table>
+											<div class="text-right">
+												<button type="submit" class='btn btn-primary'>Сохранить</button>
+											</div>
+									</form>			
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

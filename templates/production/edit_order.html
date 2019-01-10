@@ -1,0 +1,223 @@
+{% extends 'production/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-headline">
+								<div class="panel-heading">
+									<h3 class="panel-title">Заказ № {{order_id.id}}</h3>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-md-12 text-right">
+											<button class="btn btn-warning" onclick="location.href='/production/design/{{order_id.id}}'">Дизайн</button>
+										</div> 
+									</div> <br>
+											<div class="table-responsive"> 
+											<table class="table table-striped table-bordered table-hover">
+												<tr>
+													<th>
+														№
+													</th>
+													<th>
+														Позиция
+													</th>
+<!-- 													<th>
+														Размер
+													</th> -->
+													<th>
+														Метод нанесения
+													</th>
+													<th>
+														Материал
+													</th>
+													<th>
+														Количество
+													</th>
+													<th>
+														Цена, руб.
+													</th>
+													<th>
+														Цена закупки, руб.
+													</th>
+													<th>
+														Цп - Цз руб.
+													</th>
+													<th>
+														Стоимость, руб.
+													</th>
+													<th>
+														Стоимость закупки, руб.
+													</th>
+													<th>
+														Маржа, руб.
+													</th>
+													<th>
+														Мотивация, руб.
+													</th>
+													<th>
+														Поставщик
+													</th>
+													<th>
+														Предоплата поставщику, руб
+													</th>
+													<th>
+														Готовность на производстве
+													</th>
+													<th>
+														Продакшн статус
+													</th>
+													<th>Тех. задание</th>
+													<th>Тех. требования</th>
+												</tr>
+												{% for i in order%}
+												<tr class="text-center">
+													<td style="vertical-align: middle;">
+														{{ forloop.counter}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.item}}
+													</td>
+<!-- 													<td>
+														{{i.size}}
+													</td> -->
+													<td style="vertical-align: middle;">
+														{{i.app_method}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.material}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.quantity}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.price|floatformat:2}} 
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.production_purchase_price|floatformat:2}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.margin_1item|floatformat:2}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.summary|floatformat:2}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.summary_entry|floatformat:2}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.margin|floatformat:2}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.production_motivation|floatformat:2}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.provider.title}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.provider_pre_payment|floatformat:2}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.production_est_date}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.production_status}}
+													</td>
+													<td style="vertical-align: middle;">
+														{{i.design_requirements}}
+													</td style="vertical-align: middle;">
+													{%if i.design_specification%}
+													<td>
+														<a href="/production/specification_info/{{i.design_specification.id}}">{{i.design_specification}}</a>
+													</td>
+													{%else%}
+													<td>
+														
+													</td>
+													{%endif%}
+												</tr>
+												{% endfor %}
+											</table>
+											</div>
+									{%if order_id.status_done == False%}
+									<form method="GET" class='text-right' action="/production/orders/edit/add_provider/{{order_id.id}}">
+										<button class='btn btn-primary'>Изменить</button>
+									</form> <br>
+									{%endif%}
+									<div class="row">
+										<div class="col-md-6">
+											<form method="POST">
+												{% csrf_token %}
+												Общий статус заказа: {{prder_status_form.status}}
+												<button type="submit" name='send_order_status'>Отправить</button>
+											</form>
+										</div>
+										<div class="col-md-6 text-right">
+											<b>Сумма:</b> {{summary}} руб. <br> 
+											<!-- <b>Мотивация:</b> {{production_motivation}} руб. <br>  -->
+										</div>
+									</div>	
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+					<div class="col-md-6">
+						<div class="panel panel-scrolling">
+							<div class="panel-heading">
+								<h3 class="panel-title">Комментарии к заказу: </h3>
+							</div>
+							<div class="panel-body">
+								{%for comment in comments%}
+									<b>{{comment.user.first_name}} {{comment.user.last_name}}:</b> {{comment.comment}} <br>
+								{%endfor%}
+							</div>
+							<div class="panel-footer">
+								<form method="POST">
+									{% csrf_token %}
+									<div class="input-group">
+										<input class="form-control" type="text" name="comment"}>
+										<span class="input-group-btn">
+											<button class="btn btn-primary" type="submit" name="add_comment"> > > > </button></span>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="panel">
+							<div class="panel-heading">
+								<h3 class="panel-title">Сопроводительные документы:</h3>
+							</div>
+							<div class="panel-body">
+								{%for doc in docs%}
+									<b>{{doc.title}}</b> - <a href="/doc/delete/{{doc.id}}">Удалить</a>  <br>
+									<a href="{{doc.file.url}}">{{doc.file}}</a> <br>
+									<i>{{doc.discription}}</i>
+									<hr>
+								{%endfor%}
+							</div>
+							<div class="panel-footer">
+								<form method="POST" enctype="multipart/form-data">
+									{% csrf_token %}
+									{{order_edit.title}}<br>
+									{{order_edit.discription}} <br>
+									{{order_edit.file}} <br>
+										<button type="submit" class="btn btn-primary" name="docs">Отправить</button>
+								</form>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+
+
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

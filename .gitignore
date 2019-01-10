@@ -1,0 +1,10 @@
+venv_old/
+reloa
+reload
+pms_nginx.conf
+pms.sock
+ProjectManagement/__pycache__
+db.sqlite3
+pms_main/__pycache__
+uwsgi_params
+ProjectManagement/migrations/*

@@ -1,0 +1,88 @@
+{% extends 'manager/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<h3 class="panel-title">Список заказов</h3>
+							<p class="panel-subtitle"><a href="/manager/orders/recently">Текущие</a> / <a href="/manager/orders/done">Завершенные</a></p>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<form action="/manager/orders/add" method='POST'>
+									{% csrf_token %}
+								<div class="col-md-6"></div>
+								<div class="col-md-4 text-right">
+									{{ select_client.clients }}
+								</div>
+								<div class="col-md-2 text-right">
+									<button type="submit" class="btn btn-info">Добавить новый</button>	
+								</div>
+								</form> 
+							</div>	<br>
+							<table class="table table-bordered table-striped table-hover">
+								<tr>
+									<th>
+									</th>
+									<th>
+										Доп. соглашение
+									</th>
+									<th>
+										Клиент
+									</th>
+									<th>
+										Дата создания
+									</th>
+									<th>
+										Статус
+									</th>
+									<th>
+										
+									</th>
+								</tr>
+							{% for i in orders %}
+							{%if i.status.status == "Сдан" %}
+							<tr onclick="location.href='/manager/orders/edit/{{i.id}}'" style="cursor: pointer; background-color: #dcffd3;">
+							{% elif i.status.status == "Дизайн" %}
+							<tr onclick="location.href='/manager/orders/edit/{{i.id}}'" style="cursor: pointer; background-color: #ffdfa7;">
+							{% elif i.status.status == "Логист" %}
+							<tr onclick="location.href='/manager/orders/edit/{{i.id}}'" style="cursor: pointer; background-color: #cbfffc;">
+							{%else%}
+							<tr onclick="location.href='/manager/orders/edit/{{i.id}}'" style="cursor: pointer">
+							{%endif%}
+								<td>
+									{{forloop.counter}}
+								</td>
+								<td>
+									{{i.add_agreement}}
+								</td>
+								<td>
+									{{i.client}}
+								</td>
+								<td>
+								 	{{i.date}}
+								</td>
+								<td>
+								 	{{i.status}}
+								</td>
+								{%if i.status_done == False%}
+								<td>
+								 	<a href="/manager/order/{{i.id}}/done">Завершить</a>
+								</td>
+								{%else%}
+								<td>
+								 	Завершен
+								</td>	
+								{%endif%}
+							</tr>
+							{% endfor %}
+							</table>
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}
