@@ -8,3 +8,4 @@ db.sqlite3
 pms_main/__pycache__
 uwsgi_params
 ProjectManagement/migrations/*
+pms_uwsgi.ini
