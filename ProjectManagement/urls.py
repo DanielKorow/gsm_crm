@@ -77,7 +77,10 @@ urlpatterns = [
     path('logist/client/<int:pk>', login_required(LogistClientData.as_view())),
     path('client/doc/delete/<int:pk>', login_required(DeleteClientFile.as_view())),
     path('client', login_required(Client.as_view())),
+    path('client/profile/<int:pk>', login_required(ClientSelfProfile.as_view())),
+    path('client/profile/change/<int:pk>', login_required(ClientSelfProfileChange.as_view())),
     path('client/orders/<str:status>', login_required(ClientOrders.as_view())),
     path('client/orders/edit/<int:pk>', login_required(ClientOrders_edit.as_view())),
     path('client/order/<int:order_pk>/item/<int:position_pk>', login_required(ClientPositionDesign.as_view())),
+    path('client/brand/delete/<int:pk>', login_required(RemoveBrandbook.as_view())),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

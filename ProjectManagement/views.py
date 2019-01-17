@@ -243,7 +243,7 @@ class CreateClientAccount(View):
             client_account.groups.add(clients)
             try:
                 send_mail('Ваш аккаунт создан',
-                    'Для входа перейдите по адресу: http://193.110.3.63 \nЛогин: {0} \nПароль: {1}'.format(create_client_account.cleaned_data['email'], password_random), 
+                    'Для входа перейдите по адресу: http://client.gsmagency.ru \nЛогин: {0} \nПароль: {1}'.format(create_client_account.cleaned_data['email'], password_random), 
                     'info@gsmagency.ru', [create_client_account.cleaned_data['email']])
             except:
                 pass
@@ -2123,7 +2123,7 @@ class DesignerClientData(View):
 class DeleteClientFile(View):
     def get(self, request, pk):
         ClientDocuments.objects.get(id=pk).delete()
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(request.GET.get('next'))
 
 
 class LogistClients(View):
@@ -2171,3 +2171,71 @@ class LogistClientData(View):
                 docs.client = ClientProfile.objects.get(id=pk)
                 docs.save()
                 return HttpResponseRedirect('/designer/client/{0}'.format(pk))
+
+
+class ClientSelfProfile(View):
+    template = "client/profile.html"
+
+    @method_decorator(permission_required('auth.client_rw'))
+    def get(self, request, pk):
+        client_profile = ClientProfile.objects.get(user__id=pk)
+        client_docs = ClientDocuments.objects.filter(client=client_profile)
+        brandbook_docs = ClientBrandbook.objects.filter(client=client_profile)
+        client_docs_form = ClientDocumentsForm()
+        client_brand_form = ClientBrandbookForm()
+        context = {
+            'client_profile': client_profile,
+            'client_docs': client_docs,
+            'client_brandbook': brandbook_docs,
+            'docs': client_docs_form,
+            'brandbook': client_brand_form,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(permission_required('auth.client_rw'))
+    def post(self, request, pk):
+        if request.POST.get('add_file', 'no') == 'yes':
+            client_docs_form = ClientDocumentsForm(request.POST, request.FILES)
+            if client_docs_form.is_valid():
+                docs = client_docs_form.save(commit=False)
+                docs.client = ClientProfile.objects.get(user__id=pk)
+                docs.save()
+                return HttpResponseRedirect('/client/profile/{0}'.format(pk))
+        if request.POST.get('add_brand', 'no') == 'yes':
+            client_brand_form = ClientBrandbookForm(request.POST, request.FILES)
+            if client_brand_form.is_valid():
+                docs = client_brand_form.save(commit=False)
+                docs.client = ClientProfile.objects.get(user__id=pk)
+                docs.save()
+                return HttpResponseRedirect('/client/profile/{0}'.format(pk))
+        return HttpResponseRedirect('/profile/{0}'.format(pk))
+
+
+class RemoveBrandbook(View):
+
+    @method_decorator(permission_required('auth.client_rw'))
+    def get(self, request, pk):
+        ClientBrandbook.objects.get(id=pk).delete()
+        return HttpResponseRedirect(request.GET.get('next'))
+
+
+class ClientSelfProfileChange(View):
+    template = 'client/change_profile.html'
+
+    @method_decorator(permission_required('auth.client_rw'))
+    def get(self, request, pk):
+        client_profile = ClientProfile.objects.get(user__id=pk)
+        client_profile_form = ClientProfileForm(instance=client_profile)
+        context = {
+            'client_profile': client_profile,
+            'client_profile_form': client_profile_form,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(permission_required('auth.client_rw'))
+    def post(self, request, pk):
+        client_profile = ClientProfile.objects.get(user__id=pk)
+        client_profile_form = ClientProfileForm(request.POST, instance=client_profile)
+        if client_profile_form.is_valid():
+            client_profile_form.save()
+        return HttpResponseRedirect('/client/profile/{0}'.format(pk))

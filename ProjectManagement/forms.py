@@ -141,6 +141,17 @@ class ClientDocumentsForm(forms.ModelForm):
             'file': forms.FileInput(),
         }
 
+
+class ClientBrandbookForm(forms.ModelForm):
+    class Meta:
+        model = ClientBrandbook
+        fields = ('title', 'discription', 'file', 'client')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': "form-control", }),
+            'discription': forms.TextInput(attrs={'class': "form-control", }),
+            'file': forms.FileInput(),
+        }
+
     
 class Design1Form(forms.ModelForm):
     class Meta:
@@ -235,4 +246,18 @@ class DesignFilesForProductionForm(forms.ModelForm):
     class Meta:
         model = DesignFilesForProduction
         fields = ('file',)
+
+
+# Форма для изменения профиля клиента 
+# (Просто добавить необходимые поля в fields и потом во вьюхе передать экземпляр ClientProfile в форму и в темплейте можно править)
+class ClientProfileForm(forms.ModelForm):
+    class Meta:
+        model = ClientProfile
+        fields = ('label_info', 'email', 'phone')
+        widgets = {
+            'label_info': forms.Textarea(attrs={'class': "form-control", }),
+            'email': forms.EmailInput(attrs={'class': "form-control", }),
+            'phone': forms.TextInput(attrs={'class': "form-control", }),
+        }
+    
     

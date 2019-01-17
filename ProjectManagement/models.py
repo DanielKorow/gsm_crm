@@ -25,6 +25,7 @@ class ClientProfile(models.Model):
     client_type = models.IntegerField()
     contract_number = models.CharField(null=True, blank=True, max_length=50)
     contract_attached = models.BooleanField(default=False)
+    label_info = models.TextField(null=True, blank=True)
 
 
 class ClientDocuments(models.Model):
@@ -662,3 +663,18 @@ class DesignFilesForProduction(models.Model):
     
     position = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
     file = models.FileField()
+
+
+class ClientBrandbook(models.Model):
+
+    class Meta:
+        verbose_name = "Brandbook"
+        verbose_name_plural = "Brandbooks"
+
+    def __str__(self):
+        return self.title
+    
+    title = models.CharField(max_length=50)
+    discription = models.CharField(max_length=3000, blank=True, null=True)
+    file = models.FileField(upload_to='ClientBrandbooks', null=True)
+    client = models.ForeignKey(ClientProfile, on_delete=models.SET_NULL, null=True, blank=True)

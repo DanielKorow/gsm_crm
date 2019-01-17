@@ -25,7 +25,7 @@ SECRET_KEY = 'c$qzh(9a4gm0oo7*xp4)v03gh&#*mtv8x!h(sd&&n1ne=g!(i='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.0.20.51', '193.110.3.63']
+ALLOWED_HOSTS = ['10.0.20.51', '193.110.3.63', 'client.gsmagency.ru']
 
 
 # Application definition
