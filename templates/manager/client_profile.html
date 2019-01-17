@@ -134,16 +134,22 @@
 							<hr>
 							
 
-								<div class="row text-right">
+								<div class="row">
 										<form method="POST">
 											{% csrf_token %}
 											<input type="hidden" name="id" value="{{ client_profile.id }}">
 											{% if client_account %}
+											<div class="col-md-6 text-left">
 											<button type="submit" name="delete_account" value="yes" class="btn btn-warning">Удалить личный кабинет</button>
+											</div>
 											{% else %}
+											<div class="col-md-6 text-left">
 											<button type="submit" name="create_account" value="yes" class="btn btn-info">Создать личный кабинет</button>
+											</div>
 											{% endif %}
-											<button type="submit" name="delete_client" value="yes" class="btn btn-danger">Удалить клиента</button>
+											<div class="col-md-6 text-right">
+											<button type="submit" name="delete_client" value="yes" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+											</div>
 										</form>
 								</div>
 								</div>
