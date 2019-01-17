@@ -91,7 +91,7 @@
 											 {%if i.discription%}
 											 <i>{{i.discription}}</i> <br>
 											 {%endif%}
-											 <a href="{{i.file.url}}">{{i.file}}</a> <br>
+											 <a href="{{i.file.url}}">{{i.file|truncatechars:30}}</a> <br>
 											{%endfor%}
 											{%endif%}
 										</div>
@@ -118,7 +118,7 @@
 											 {%if i.discription%}
 											 <i>{{i.discription}}</i> <br>
 											 {%endif%}
-											 <a href="{{i.file.url}}">{{i.file}}</a> <br>
+											 <a href="{{i.file.url}}">{{i.file|truncatechars:30}}</a> <br>
 											{%endfor%}
 											{%endif%}
 										</div>	
