@@ -248,7 +248,7 @@ class DesignFilesForProductionForm(forms.ModelForm):
         fields = ('file',)
 
 
-# Форма для изменения профиля клиента 
+# Форма для изменения профиля клиента у КЛИЕНТА!!
 # (Просто добавить необходимые поля в fields и потом во вьюхе передать экземпляр ClientProfile в форму и в темплейте можно править)
 class ClientProfileForm(forms.ModelForm):
     class Meta:
@@ -260,4 +260,21 @@ class ClientProfileForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': "form-control", }),
         }
     
-    
+
+# Форма для изменения профиля клиента у Менеджера!!
+# (Просто добавить необходимые поля в fields и потом во вьюхе передать экземпляр ClientProfile в форму и в темплейте можно править)    
+class ClientProfileManagerForm(forms.ModelForm):
+    class Meta:
+        model = ClientProfile
+        fields = ('label_info', 'email', 'phone', 'surname', 'first_name', 'middle_name', 'requisites', 'delivery_address', 'company')
+        widgets = {
+            'label_info': forms.Textarea(attrs={'class': "form-control", }),
+            'email': forms.EmailInput(attrs={'class': "form-control", }),
+            'phone': forms.TextInput(attrs={'class': "form-control", }),
+            'surname': forms.TextInput(attrs={'class': "form-control", }),
+            'first_name': forms.TextInput(attrs={'class': "form-control", }),
+            'middle_name': forms.TextInput(attrs={'class': "form-control", }),
+            'requisites': forms.Textarea(attrs={'class': "form-control", }),
+            'delivery_address': forms.TextInput(attrs={'class': "form-control", }),
+            'company': forms.TextInput(attrs={'class': "form-control", }),
+        }

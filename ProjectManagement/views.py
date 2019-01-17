@@ -250,16 +250,18 @@ class CreateClientAccount(View):
             return HttpResponseRedirect('/manager/clients/enterprise')
 
 
-class ChangeClientProfile(View):
+class ClientProfileManager(View):
 
-    template = 'manager/change_client_profile.html'
+    template = 'manager/client_profile.html'
 
 
     @method_decorator(permission_required('auth.manage_clients'))
     def get(self, request, pk):
         client_docs_form = ClientDocumentsForm()
+        client_brand_form = ClientBrandbookForm()
         client_profile = ClientProfile.objects.get(id=pk)
         client_docs = ClientDocuments.objects.filter(client=client_profile)
+        brandbook_docs = ClientBrandbook.objects.filter(client=client_profile)
         contract_attached_form = ContactAttachedForm(instance=client_profile)
         try:
             client_account = User.objects.get(id=client_profile.user.id)
@@ -271,9 +273,11 @@ class ChangeClientProfile(View):
             'client_account': client_account,
             'client_profile': client_profile,
             'docs': client_docs_form,
+            'client_brandbook': brandbook_docs,
             'client_docs': client_docs,
+            'brandbook': client_brand_form,
         }
-        return render(request, 'manager/change_client_profile.html', context)
+        return render(request, self.template, context)
 
 
     @method_decorator(permission_required('auth.manage_clients'))
@@ -293,48 +297,26 @@ class ChangeClientProfile(View):
                 return HttpResponseRedirect('/manager/clients/enterprise')
         if request.POST.get('create_account', 'no') == 'yes':
                 return HttpResponseRedirect('/manager/create_client_account/{0}'.format(pk))
-        if request.POST.get('change_account', 'no') == 'yes':
-            client_profile = ClientProfile.objects.get(id=pk)
-            if client_profile.client_type == 2:
-                replace_text = client_profile.requisites.replace('<br> ', '\n')
-                change_form = CreateClientForm(initial={'surname': client_profile.surname, 'first_name': client_profile.first_name, 
-                    'middle_name': client_profile.middle_name, 'company_name': client_profile.company, 'email': client_profile.email, 
-                    'requisites': replace_text, 'phone': client_profile.phone, 'delivery_address': client_profile.delivery_address})
-                context = {
-                    'change_form' : change_form,
-                }
-                return render(request, 'manager/change_client_data.html', context)
-            if client_profile.client_type == 1:
-                pass
-        if request.POST.get('save_changes', 'no') == 'yes':
-            client_profile = ClientProfile.objects.get(id=pk)
-            change_form = CreateClientForm(request.POST)
-            if change_form.is_valid():
-                replace_text = change_form.cleaned_data['requisites'].replace('\n\r', '<br> ')
-                replace_text = change_form.cleaned_data['requisites'].replace('\n', '<br> ')
-                client_profile.surname = change_form.cleaned_data['surname']
-                client_profile.first_name = change_form.cleaned_data['first_name']
-                client_profile.middle_name = change_form.cleaned_data['middle_name']
-                client_profile.company = change_form.cleaned_data['company_name']
-                client_profile.email = change_form.cleaned_data['email']
-                client_profile.phone = change_form.cleaned_data['phone']
-                client_profile.delivery_address = change_form.cleaned_data['delivery_address']
-                client_profile.requisites = replace_text
-                client_profile.save()
-                return HttpResponseRedirect('/manager/change_client_profile/{0}'.format(pk))
         if request.POST.get('add_file', 'no') == 'yes':
             client_docs_form = ClientDocumentsForm(request.POST, request.FILES)
             if client_docs_form.is_valid():
                 docs = client_docs_form.save(commit=False)
                 docs.client = ClientProfile.objects.get(id=pk)
                 docs.save()
-                return HttpResponseRedirect('/manager/change_client_profile/{0}'.format(pk))
+                return HttpResponseRedirect('/manager/client_profile/{0}'.format(pk))
         if 'contract_att' in request.POST:
             client_profile = ClientProfile.objects.get(id=pk)
             contract_attached_form = ContactAttachedForm(request.POST, instance=client_profile)
             if contract_attached_form.is_valid():
                 contract_attached_form.save()
-                return HttpResponseRedirect('/manager/change_client_profile/{0}'.format(pk))
+                return HttpResponseRedirect('/manager/client_profile/{0}'.format(pk))
+        if request.POST.get('add_brand', 'no') == 'yes':
+            client_brand_form = ClientBrandbookForm(request.POST, request.FILES)
+            if client_brand_form.is_valid():
+                docs = client_brand_form.save(commit=False)
+                docs.client = ClientProfile.objects.get(id=pk)
+                docs.save()
+                return HttpResponseRedirect('/manager/client_profile/{0}'.format(pk))
 
 
 
@@ -2173,6 +2155,8 @@ class LogistClientData(View):
                 return HttpResponseRedirect('/designer/client/{0}'.format(pk))
 
 
+# Доп работы Январь 2019
+
 class ClientSelfProfile(View):
     template = "client/profile.html"
 
@@ -2227,6 +2211,7 @@ class ClientSelfProfileChange(View):
         client_profile = ClientProfile.objects.get(user__id=pk)
         client_profile_form = ClientProfileForm(instance=client_profile)
         context = {
+            'active_clients': 'active',
             'client_profile': client_profile,
             'client_profile_form': client_profile_form,
         }
@@ -2239,3 +2224,27 @@ class ClientSelfProfileChange(View):
         if client_profile_form.is_valid():
             client_profile_form.save()
         return HttpResponseRedirect('/client/profile/{0}'.format(pk))
+
+
+class ChangeClientProfileManager(View):
+    template = 'manager/change_client_profile.html'
+
+    def get(self, request, pk):
+        client_profile = ClientProfile.objects.get(id=pk)
+        client_profile_form = ClientProfileManagerForm(instance=client_profile)
+        context = {
+            'active_clients': 'active',
+            'client_profile': client_profile,
+            'client_profile_form': client_profile_form,
+        }
+        return render(request, self.template, context)
+
+    def post(self, request, pk):
+        client_profile = ClientProfile.objects.get(id=pk)
+        client_profile_form = ClientProfileManagerForm(request.POST, instance=client_profile)
+        if client_profile_form.is_valid():
+            # replace_text = client_profile_form.cleaned_data['requisites'].replace('\n\r', '<br> ')
+            # replace_text = client_profile_form.cleaned_data['requisites'].replace('\n', '<br> ')
+            # client_profile_form.requisites = replace_text
+            client_profile_form.save()
+        return HttpResponseRedirect('/manager/client_profile/{0}'.format(pk))

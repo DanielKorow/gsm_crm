@@ -7,7 +7,7 @@
 					<div class="panel panel-headline">
 						<div class="panel-heading">
 							<h3 class="panel-title">Профиль клиента</h3>
-							<div class="subtitle">
+							<div class="subtitle"> <br>
 										 Номер договора: {{client_profile.contract_number}}  
 							</div>
 						</div>
@@ -51,9 +51,9 @@
 									</div>
 									<div class="row">
 										<div class="col-md-12">
-											{% autoescape off %}
-											{{ client_profile.requisites }}
-											{% endautoescape %}
+											
+											{{ client_profile.requisites|linebreaksbr }}
+											
 										</div>
 									</div>
 								</div>
@@ -72,7 +72,7 @@
 							</div> <br>
 							<div class="row">
 								<div class="col-md-12 text-right">
-									<button type="submit" class="btn btn-default" name="save">Сохранить</button>
+									<button type="submit" class="btn btn-success" name="save">Сохранить</button>
 								</div>
 							</div>
 							</form>
