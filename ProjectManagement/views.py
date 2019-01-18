@@ -2074,8 +2074,10 @@ class DesignerClientData(View):
     @method_decorator(permission_required('auth.designer_rw'))
     def get(self, request, pk):
         client_docs_form = ClientDocumentsForm()
+        client_brand_form = ClientBrandbookForm()
         client_profile = ClientProfile.objects.get(id=pk)
         client_docs = ClientDocuments.objects.filter(client=client_profile)
+        brandbook_docs = ClientBrandbook.objects.filter(client=client_profile)
         contract_attached_form = ContactAttachedForm(instance=client_profile)
         try:
             client_account = User.objects.get(id=client_profile.user.id)
@@ -2088,6 +2090,8 @@ class DesignerClientData(View):
             'client_profile': client_profile,
             'docs': client_docs_form,
             'client_docs': client_docs,
+            'brandbook': client_brand_form,
+            'client_brandbook': brandbook_docs,
         }
         return render(request, self.template, context)
 
