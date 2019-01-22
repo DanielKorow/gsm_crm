@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from .models import *
+from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 
 class LoginForm(forms.Form):
@@ -278,3 +279,14 @@ class ClientProfileManagerForm(forms.ModelForm):
             'delivery_address': forms.TextInput(attrs={'class': "form-control", }),
             'company': forms.TextInput(attrs={'class': "form-control", }),
         }
+
+
+class DesignerTReqForm(forms.ModelForm):
+    class Meta:
+        model = DesignerTReq
+        fields = ('technical_req', 'title')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': "form-control", }),
+            'technical_req': SummernoteWidget(),
+        }
+    

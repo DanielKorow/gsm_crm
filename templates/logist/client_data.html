@@ -42,36 +42,90 @@
 								</div>
 								<div class="col-md-4">
 									<div class="row">
-										<div class="col-md-2"><b>Реквизиты: </b></div>
-										<div class="col-md-10">
-											{% autoescape off %}
-											{{ client_profile.requisites }}
-											{% endautoescape %}
+										<div class="col-md-12"><b>Реквизиты: </b></div>
+									</div> 
+									<div class="row">
+										<div class="col-md-12">
+											{%if client_profile.requisites%}
+											{{ client_profile.requisites|linebreaksbr }}
+											{%endif%}
 										</div>
-									</div> 		
+									</div>		
 								</div>
-							</div> <br>
-							<div class='row'>
 								<div class="col-md-4">
-									<b>Загрузить документ:</b>
-									<form method="POST" enctype="multipart/form-data">
-										{% csrf_token %}
-											Название: {{docs.title}}<br> 
-											Описание: {{docs.discription}} <br>
-											{{docs.file}} <br>
-											<button type='submit' class="btn btn-default" name='add_file' value="yes">Отправить</button>
-								</form> <br>
-								</div> 
-								<div class="col-md-6">
-									<b>Документы:</b> <br>
-									{% for i in client_docs%}
-									 {{i.title}} - <a href="/client/doc/delete/{{i.id}}">Удалить</a> <br>
-									 <i>{{i.discription}}</i> <br>
-									 <a href="{{i.file.url}}">{{i.file}}</a>
-									{%endfor%}
-								</div>	
-							</div> <br>
+									<div class="row">
+										<div class="col-md-12"><b>Информация для бирок: </b></div>
+									</div> 
+									<div class="row">
+										<div class="col-md-12">
+											{%if client_profile.label_info%}
+											{{ client_profile.label_info|linebreaksbr }}
+											{%endif%}
+										</div>
+									</div>	
 								</div>
+							</div> <br>
+							<hr>
+
+							<div class="row">
+								<div class="col-md-6">
+									<h1 class="text-center">Документы</h1>
+									<div class="row">
+										<div class="col-md-6">
+											<b>Загрузить документ:</b>
+											<form method="POST" enctype="multipart/form-data">
+												{% csrf_token %}
+													Название: {{docs.title}} <br>
+													Описание: {{docs.discription}} <br>
+													{{docs.file}} <br>
+													<button type='submit' class="btn btn-default" name='add_file' value="yes">Отправить</button>
+											</form> <br>
+										</div> 
+										<div class="col-md-6">
+											{%if client_docs%}
+											<b>Документы:</b> <br>
+											{% for i in client_docs%}
+											 {{i.title}} - <a href="/client/doc/delete/{{i.id}}?next={{request.get_full_path|urlencode}}">Удалить</a> <br>
+											 {%if i.discription%}
+											 <i>{{i.discription}}</i> <br>
+											 {%endif%}
+											 <a href="{{i.file.url}}">{{i.file|truncatechars:30}}</a> <br>
+											{%endfor%}
+											{%endif%}
+										</div>
+									</div>	
+								</div>
+								<div class="col-md-6">
+									<h1 class="text-center">Брендбук</h1>
+									<div class="row">
+										<div class="col-md-6">
+											<b>Загрузить документ:</b>
+											<form method="POST" enctype="multipart/form-data">
+												{% csrf_token %}
+													Название: {{brandbook.title}} <br>
+													Описание: {{brandbook.discription}} <br>
+													{{brandbook.file}} <br>
+													<button type='submit' class="btn btn-default" name='add_brand' value="yes">Отправить</button>
+											</form> <br>
+										</div> 
+										<div class="col-md-6">
+											{%if client_brandbook%}
+											<b>Документы:</b> <br>
+											{% for i in client_brandbook%}
+											 {{i.title}} - <a href="/client/brand/delete/{{i.id}}?next={{request.get_full_path|urlencode}}">Удалить</a> <br>
+											 {%if i.discription%}
+											 <i>{{i.discription}}</i> <br>
+											 {%endif%}
+											 <a href="{{i.file.url}}">{{i.file|truncatechars:30}}</a> <br>
+											{%endfor%}
+											{%endif%}
+										</div>	
+									</div>
+								</div>
+							</div>
+							<hr>
+
+							</div>
 						</div>
 					</div>
 					<!-- END OVERVIEW -->

@@ -2104,6 +2104,13 @@ class DesignerClientData(View):
                 docs.client = ClientProfile.objects.get(id=pk)
                 docs.save()
                 return HttpResponseRedirect('/designer/client/{0}'.format(pk))
+        if request.POST.get('add_brand', 'no') == 'yes':
+            client_brand_form = ClientBrandbookForm(request.POST, request.FILES)
+            if client_brand_form.is_valid():
+                docs = client_brand_form.save(commit=False)
+                docs.client = ClientProfile.objects.get(id=pk)
+                docs.save()
+                return HttpResponseRedirect('/designer/client/{0}'.format(pk))
 
 
 class DeleteClientFile(View):
@@ -2131,9 +2138,11 @@ class LogistClientData(View):
     @method_decorator(permission_required('auth.logist_rw'))
     def get(self, request, pk):
         client_docs_form = ClientDocumentsForm()
+        client_brand_form = ClientBrandbookForm()
         client_profile = ClientProfile.objects.get(id=pk)
         client_docs = ClientDocuments.objects.filter(client=client_profile)
         contract_attached_form = ContactAttachedForm(instance=client_profile)
+        brandbook_docs = ClientBrandbook.objects.filter(client=client_profile)
         try:
             client_account = User.objects.get(id=client_profile.user.id)
         except:
@@ -2145,10 +2154,12 @@ class LogistClientData(View):
             'client_profile': client_profile,
             'docs': client_docs_form,
             'client_docs': client_docs,
+            'brandbook': client_brand_form,
+            'client_brandbook': brandbook_docs,
         }
         return render(request, self.template, context)
 
-    @method_decorator(permission_required('auth.designer_rw'))
+    @method_decorator(permission_required('auth.logist_rw'))
     def post(self, request, pk):
         if request.POST.get('add_file', 'no') == 'yes':
             client_docs_form = ClientDocumentsForm(request.POST, request.FILES)
@@ -2156,7 +2167,14 @@ class LogistClientData(View):
                 docs = client_docs_form.save(commit=False)
                 docs.client = ClientProfile.objects.get(id=pk)
                 docs.save()
-                return HttpResponseRedirect('/designer/client/{0}'.format(pk))
+                return HttpResponseRedirect('/logist/client/{0}'.format(pk))
+        if request.POST.get('add_brand', 'no') == 'yes':
+            client_brand_form = ClientBrandbookForm(request.POST, request.FILES)
+            if client_brand_form.is_valid():
+                docs = client_brand_form.save(commit=False)
+                docs.client = ClientProfile.objects.get(id=pk)
+                docs.save()
+                return HttpResponseRedirect('/logist/client/{0}'.format(pk))
 
 
 # Доп работы Январь 2019
@@ -2201,7 +2219,6 @@ class ClientSelfProfile(View):
 
 class RemoveBrandbook(View):
 
-    @method_decorator(permission_required('auth.client_rw'))
     def get(self, request, pk):
         ClientBrandbook.objects.get(id=pk).delete()
         return HttpResponseRedirect(request.GET.get('next'))
@@ -2252,3 +2269,75 @@ class ChangeClientProfileManager(View):
             # client_profile_form.requisites = replace_text
             client_profile_form.save()
         return HttpResponseRedirect('/manager/client_profile/{0}'.format(pk))
+
+
+class DesignerTechReqsList(View):
+    template = 'designer/t_reqs.html'
+
+    @method_decorator(permission_required('auth.designer_rw'))
+    def get(self, request):
+        t_reqs = DesignerTReq.objects.all()
+        context = {
+            't_reqs': t_reqs,
+            'active_t_reqs': 'active',
+        }
+        return render(request, self.template, context)
+
+
+class DesignerTechReqAdd(View):
+    template = 'designer/create_t_req.html'
+
+    @method_decorator(permission_required('auth.designer_rw'))
+    def get(self, request):
+        create_t_req_form = DesignerTReqForm()
+        context = {
+            'active_t_reqs': 'active',
+            'create_t_req_form': create_t_req_form,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(permission_required('auth.designer_rw'))
+    def post(self, request):
+        create_t_req_form = DesignerTReqForm(request.POST)
+        if create_t_req_form.is_valid():
+            create_t_req_form.save()
+        return HttpResponseRedirect('/designer/technical_requirements')
+
+
+class DesignerShowTReq(View):
+    template = 'designer/show_t_req.html'
+
+    def get(self, request, pk):
+        t_req = DesignerTReq.objects.get(id=pk)
+        context = {
+            'active_t_reqs': 'active',
+            't_req': t_req,
+        }
+        return render(request, self.template, context)
+
+
+class DesignerEditTReq(View):
+    template = 'designer/create_t_req.html'
+
+    def get(self, request, pk):
+        t_req = DesignerTReq.objects.get(id=pk)
+        create_t_req_form = DesignerTReqForm(instance=t_req)
+        context = {
+            'active_t_reqs': 'active',
+            'create_t_req_form': create_t_req_form,
+        }
+        return render(request, self.template, context)
+
+    def post(self, request, pk):
+        t_req = DesignerTReq.objects.get(id=pk)
+        create_t_req_form = DesignerTReqForm(request.POST, instance=t_req)
+        if create_t_req_form.is_valid():
+            create_t_req_form.save()
+        return HttpResponseRedirect('/designer/technical_requirements')
+
+
+class DeleteTReq(View):
+
+    def get(self, request, pk):
+        DesignerTReq.objects.get(id=pk).delete()
+        return HttpResponseRedirect(request.GET.get('next'))

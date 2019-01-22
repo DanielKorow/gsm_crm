@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ProjectManagement',
+    'django_summernote',
 ]
 
 MIDDLEWARE = [
@@ -145,3 +146,19 @@ EMAIL_HOST_PASSWORD = "Zaq1Xsw2Cde3"
 EMAIL_USE_SSL = True
 
 # STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+SUMMERNOTE_CONFIG = {
+    'summernote': {
+        'airMode': False,
+
+        'width': '100%',
+        'height': '500',
+
+        # Or, set editor language/locale forcely
+        'lang': 'ru-RU',
+
+        'print': {
+            'stylesheetUrl': '/some_static_folder/printable.css',
+        },
+    },
+}

@@ -678,3 +678,17 @@ class ClientBrandbook(models.Model):
     discription = models.CharField(max_length=3000, blank=True, null=True)
     file = models.FileField(upload_to='ClientBrandbooks', null=True)
     client = models.ForeignKey(ClientProfile, on_delete=models.SET_NULL, null=True, blank=True)
+
+
+class DesignerTReq(models.Model):
+
+    class Meta:
+        verbose_name = "DesignerTReq"
+        verbose_name_plural = "DesignerTReqs"
+
+    def __str__(self):
+        pass
+
+    title = models.CharField(max_length=200, blank=True, null=True)
+    technical_req = models.TextField()
+    
