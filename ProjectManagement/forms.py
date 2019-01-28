@@ -290,3 +290,12 @@ class DesignerTReqForm(forms.ModelForm):
             'technical_req': SummernoteWidget(),
         }
     
+
+class DesignerTTaskForm(forms.ModelForm):
+    class Meta:
+        model = ProductionTTask
+        fields = ('technical_task', 'title')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': "form-control", }),
+            'technical_task': SummernoteWidget(),
+        }

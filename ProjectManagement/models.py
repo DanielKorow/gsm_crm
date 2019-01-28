@@ -286,7 +286,9 @@ class Order(models.Model):
     production_est_date = models.DateField(blank=True, null=True) # Дата готовности на производстве
     info = models.CharField(blank=True, null=True, max_length=10000) # Дополнительная информация по позиции
     design_specification = models.ForeignKey('DesignSpecification', on_delete=models.SET_NULL, null=True, blank=True) # Тех. требования
-    design_requirements = models.CharField(blank=True, null=True, max_length=10000) # Тех. задание
+    design_specification_new = models.ForeignKey('DesignerTReq', on_delete=models.SET_NULL, null=True, blank=True) # Тех. требования новые
+    design_requirements = models.CharField(blank=True, null=True, max_length=10000) # Тех. заданиеProductionTTask
+    design_requirements_new = models.ForeignKey('ProductionTTask', on_delete=models.SET_NULL, null=True, blank=True) #Тех. задание новое
     delivering_price = models.FloatField(blank=True, null=True, default=0) # Стоимость доставки
     designer_date = models.DateField(blank=True, null=True) # Дата готовности дизайна
     provider_pre_payment = models.FloatField(blank=True, null=True, default=0) # Предоплата поставщику
@@ -680,15 +682,28 @@ class ClientBrandbook(models.Model):
     client = models.ForeignKey(ClientProfile, on_delete=models.SET_NULL, null=True, blank=True)
 
 
+# Технические требования
 class DesignerTReq(models.Model):
-
+ 
     class Meta:
         verbose_name = "DesignerTReq"
         verbose_name_plural = "DesignerTReqs"
 
     def __str__(self):
-        pass
+        return self.title
 
     title = models.CharField(max_length=200, blank=True, null=True)
     technical_req = models.TextField()
     
+# Технические задания
+class ProductionTTask(models.Model):
+
+    class Meta:
+        verbose_name = "TTask"
+        verbose_name_plural = "TTasks"
+
+    def __str__(self):
+        return self.title
+
+    title = models.CharField(max_length=200, blank=True, null=True)
+    technical_task = models.TextField()

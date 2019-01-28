@@ -54,7 +54,7 @@
 													</th>
 												</tr>
 												{% for i in order%}
-												<tr class="text-center">
+												<tr class="text-center" style="cursor: pointer">
 													<td style="vertical-align: middle;">
 														{{ forloop.counter}}
 													</td>
@@ -75,7 +75,7 @@
 														{{i.designer_date}}
 													</td>
 													<td style="vertical-align: middle;">
-														<a href="/designer/specification_info/{{i.design_specification.id}}">{{i.design_specification }}</a>
+														<a href="/designer/technical_requirement/{{i.design_specification.id}}">{{i.design_specification }}</a>
 													</td>
 													{%else%}
 													<td style="vertical-align: middle;">
@@ -84,7 +84,7 @@
 													</td>
 													{%if i.design_specification%}
 													<td style="vertical-align: middle;">
-														<a href="/designer/specification_info/{{i.design_specification.id}}">{{i.design_specification }}</a>
+														<a href="/designer/technical_requirement/{{i.design_specification.id}}">{{i.design_specification }}</a>
 													</td>
 													{%else%}
 													<td style="vertical-align: middle;">
@@ -93,7 +93,7 @@
 													{%endif%}
 													{%endif%}
 													<td style="vertical-align: middle;">
-														{{i.design_requirements}}
+														{{i.design_requirements_new}}
 													</td>
 													<td style="vertical-align: middle;">
 														<a href="/designer/order/{{order_id.id}}/position/{{i.id}}"><i class="fa fa-comments-o" aria-hidden="true"></i></a>

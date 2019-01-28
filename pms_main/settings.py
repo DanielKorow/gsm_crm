@@ -152,7 +152,7 @@ SUMMERNOTE_CONFIG = {
         'airMode': False,
 
         'width': '100%',
-        'height': '500',
+        'height': '580',
 
         # Or, set editor language/locale forcely
         'lang': 'ru-RU',

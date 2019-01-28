@@ -1023,7 +1023,7 @@ class ProductionOrderEdit_change_provider(View):
     template = 'production/edit_order_add_provider.html'
     providers_formset = modelformset_factory(Order, fields=('id', 'provider', 'production_status', 'app_method', 
         'production_purchase_price', 'production_est_date', 'material',
-        'design_specification', 'design_requirements', 'provider_pre_payment'), 
+        'design_specification_new', 'design_requirements_new', 'provider_pre_payment'), 
         widgets={
                     'id': forms.TextInput(attrs={'type': 'hidden'}), 
                     'provider': forms.Select(attrs={'class': 'form-control input-sm'}), 
@@ -1031,8 +1031,8 @@ class ProductionOrderEdit_change_provider(View):
                     'app_method': forms.Select(attrs={'class': 'form-control input-sm'}),
                     'material': forms.Select(attrs={'class': 'form-control input-sm'}),
                     'production_purchase_price': forms.NumberInput(attrs={'class': 'form-control input-sm'}),
-                    'design_specification': forms.Select(attrs={'class': 'form-control input-sm'}),
-                    'design_requirements': forms.TextInput(attrs={'class': 'form-control input-sm'}),
+                    'design_specification_new': forms.Select(attrs={'class': 'form-control input-sm'}),
+                    'design_requirements_new': forms.Select(attrs={'class': 'form-control input-sm'}),
                     'production_est_date': forms.DateInput(format=('%Y-%m-%d'), attrs={'class': 'form-control input-sm', 'type': 'date'}),
                 })
 
@@ -1381,11 +1381,11 @@ class Designer_orders_edit(View):
             new_formset['material']=i.material
             new_formset['quantity']=i.quantity
             new_formset['price']=i.price
-            new_formset['design_specification']=i.design_specification
+            new_formset['design_specification']=i.design_specification_new
             new_formset['production_status']=i.production_status
             new_formset['summary']=i.summary
             new_formset['provider']=i.provider
-            new_formset['design_requirements']=i.design_requirements
+            new_formset['design_requirements_new']=i.design_requirements_new
             new_formset['post_payment']=i.post_payment
             new_formset['pre_payment']=i.pre_payment
             new_formset['production_status']=i.production_status
@@ -2341,3 +2341,144 @@ class DeleteTReq(View):
     def get(self, request, pk):
         DesignerTReq.objects.get(id=pk).delete()
         return HttpResponseRedirect(request.GET.get('next'))
+
+
+class ProductionTechReqsList(View):
+    template = "production/t_reqs.html"
+
+    def get(self, request):
+        t_reqs = DesignerTReq.objects.all()
+        context = {
+            't_reqs': t_reqs,
+            'active_t_reqs': 'active',
+        }
+        return render(request, self.template, context)
+
+
+class ProductionTechReqAdd(View):
+    template = 'production/create_t_req.html'
+
+    def get(self, request):
+        create_t_req_form = DesignerTReqForm()
+        context = {
+            'active_t_reqs': 'active',
+            'create_t_req_form': create_t_req_form,
+        }
+        return render(request, self.template, context)
+
+    def post(self, request):
+        create_t_req_form = DesignerTReqForm(request.POST)
+        if create_t_req_form.is_valid():
+            create_t_req_form.save()
+        return HttpResponseRedirect('/production/technical_requirements')
+
+
+class ProductionShowTReq(View):
+    template = 'production/show_t_req.html'
+
+    def get(self, request, pk):
+        t_req = DesignerTReq.objects.get(id=pk)
+        context = {
+            'active_t_reqs': 'active',
+            't_req': t_req,
+        }
+        return render(request, self.template, context)
+
+
+class ProductionEditTReq(View):
+    template = 'production/create_t_req.html'
+
+    def get(self, request, pk):
+        t_req = DesignerTReq.objects.get(id=pk)
+        create_t_req_form = DesignerTReqForm(instance=t_req)
+        context = {
+            'active_t_reqs': 'active',
+            'create_t_req_form': create_t_req_form,
+        }
+        return render(request, self.template, context)
+
+    def post(self, request, pk):
+        t_req = DesignerTReq.objects.get(id=pk)
+        create_t_req_form = DesignerTReqForm(request.POST, instance=t_req)
+        if create_t_req_form.is_valid():
+            create_t_req_form.save()
+        return HttpResponseRedirect('/designer/technical_requirements')
+
+
+class ProductionTechTasksList(View):
+    template = "production/t_tasks.html"
+
+    def get(self, request):
+        t_tasks = ProductionTTask.objects.all()
+        context = {
+            't_tasks': t_tasks,
+            'active_t_tasks': 'active',
+        }
+        return render(request, self.template, context)
+
+
+class ProductionTechTasksAdd(View):
+    template = "production/create_t_task.html"
+
+    def get(self, request):
+        create_t_task_form = DesignerTTaskForm()
+        context = {
+            'create_t_task_form': create_t_task_form,
+            'active_t_tasks': 'active',
+        }
+        return render(request, self.template, context)
+
+    def post(self, request):
+        create_t_task_form = DesignerTTaskForm(request.POST)
+        if create_t_task_form.is_valid():
+            create_t_task_form.save()
+        return HttpResponseRedirect('/production/technical_tasks')
+
+
+class ProductionShowTTasks(View):
+    template = "production/show_t_task.html"
+
+    def get(self, request, pk):
+        t_task = ProductionTTask.objects.get(id=pk)
+        context = {
+            't_task': t_task,
+            'active_t_tasks': 'active',
+        }
+        return render(request, self.template, context)
+
+
+
+class ProductionEditTTasks(View):
+    template = "production/create_t_task.html"
+
+    def get(self, request, pk):
+        t_task = ProductionTTask.objects.get(id=pk)
+        create_t_task_form = DesignerTTaskForm(instance=t_task)
+        context = {
+            'active_t_tasks': 'active',
+            'create_t_task_form': create_t_task_form,
+        }
+        return render(request, self.template, context)
+
+    def post(self, request, pk):
+        t_task = ProductionTTask.objects.get(id=pk)
+        create_t_task_form = DesignerTTaskForm(request.POST, instance=t_task)
+        if create_t_task_form.is_valid():
+            create_t_task_form.save()
+        return HttpResponseRedirect('/production/technical_tasks')
+
+
+class ProductionDeleteTTasks(View):
+
+    def get(self, request, pk):
+        ProductionTTask.objects.get(id=pk).delete()
+        return HttpResponseRedirect('/production/technical_tasks')
+
+
+class Design(View):
+
+	def get(self, request, order_id, position_id):
+		pass
+
+	def get(self, request, order_id, position_id):
+		pass

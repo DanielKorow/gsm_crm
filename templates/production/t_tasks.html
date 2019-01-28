@@ -1,0 +1,51 @@
+{% extends 'production/base.html' %}
+{% block content %}
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- OVERVIEW -->
+					<div class="panel panel-headline">	
+						<div class="panel-heading">
+							<h3 class="panel-title"> Технические задания </h3>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-12 text-right">
+									<form action="/production/technical_tasks/add">
+									<button type="submit" class="btn btn-info"><i class="fa fa-plus-square"></i> Добавить</button>
+									</form>
+								</div> 
+							</div>	<br>
+						<table class="table table-striped table-bordered table-hover">
+								<tr>
+									<th>
+										№
+									</th>
+									<th>
+										Название
+									</th>
+									<th></th>
+								</tr>
+								{% for i in t_tasks%}
+								<tr>
+									<td class="col-md-1">
+										{{ forloop.counter }}
+									</td>
+									<td class="col-md-8">
+										{{ i.title }}
+									</td>
+									<td class="col-md-9 text-center">
+										<button class="btn btn-info" onclick="location.href='/production/technical_task/{{i.id}}'"><i class="fa fa-eye" aria-hidden="true"></i></button>
+										<button class="btn btn-warning" onclick="location.href='/production/technical_task/edit/{{i.id}}'"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+										<button class="btn btn-danger" onclick="location.href='/production/technical_task/delete/{{i.id}}'"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+									</td>
+								</tr>
+								{% endfor %}
+						</table>
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+{% endblock %}

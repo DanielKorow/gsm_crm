@@ -126,12 +126,19 @@
 													<td style="vertical-align: middle;">
 														{{i.production_status}}
 													</td>
+													
+													{%if i.design_requirements_new%}
 													<td style="vertical-align: middle;">
-														{{i.design_requirements}}
-													</td style="vertical-align: middle;">
-													{%if i.design_specification%}
+														<a href="/production/technical_task/{{i.design_requirements_new.id}}">{{i.design_requirements_new}}</a>
+													</td>
+													{%else%}
 													<td>
-														<a href="/production/specification_info/{{i.design_specification.id}}">{{i.design_specification}}</a>
+														
+													</td>
+													{%endif%}
+													{%if i.design_specification_new%}
+													<td style="vertical-align: middle;">
+														<a href="/production/technical_requirement/{{i.design_specification_new.id}}">{{i.design_specification_new}}</a>
 													</td>
 													{%else%}
 													<td>
