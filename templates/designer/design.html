@@ -1,187 +1,82 @@
 {% extends 'designer/base.html' %}
 {% block content %}
+<script type="text/javascript">
+     $(document).ready(
+        function(){
+            edit_height = $('.edit_design1').height()
+            $('.empty_design1').height(edit_height);
+            edit_height = $('.edit_design2').height()
+            $('.empty_design2').height(edit_height);
+            edit_height = $('.edit_design3').height()
+            $('.empty_design3').height(edit_height);
+            edit_height = $('.edit_design4').height()
+            $('.empty_design4').height(edit_height);
+    });
+
+    function view(divId){
+        v = document.getElementById(divId);
+        if(v.style.display === 'none') {
+            v.style.display = 'block';
+        }
+        else {
+             v.style.display = 'none';
+        }
+
+    }
+</script>
             <!-- MAIN CONTENT -->
             <div class="main-content">
                 <div class="container-fluid">
                     <!-- OVERVIEW -->
                     <div class="row">
                         <div class="col-md-8">
-                            <div class='row'>
-                                <div class="col-md-12">
-                            <div class="panel panel-headline">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Заказ № {{order_id.id}}</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class='text-right'>
-                                    </div> <br>
-                                        <form method="POST">
-
-                                        {{formset.management_form}}
-                                        {% csrf_token %}
-                                        <div class="table-responsive"> 
-                                            <table class="table table-striped table-bordered table-hover">
-                                                <tr>
-                                                    <th>
-                                                        №
-                                                    </th>
-                                                    <th>
-                                                        Позиция
-                                                    </th>
-                                                    <th>
-                                                        Метод нанесения
-                                                    </th>
-                                                    <th>
-                                                        Материал
-                                                    </th>
-                                                    <th>
-                                                        Статус
-                                                    </th>
-                                                    <th>
-                                                        Дата готовности
-                                                    </th>
-                                                    <th>
-                                                        Дизайн
-                                                    </th>
-                                                    <th>
-                                                        Производство
-                                                    </th>
-                                                </tr>
-                                                {% for i in order%}
-                                                <tr class="text-center" style="cursor: pointer" onclick="location.href='/designer/design/{{order_id.id}}/{{i.id}}'">
-                                                    <td style="vertical-align: middle;">
-                                                        {{ forloop.counter}}
-                                                    </td>
-                                                    <td style="vertical-align: middle;">
-                                                        {{i.item}}
-                                                    </td>
-                                                    <td style="vertical-align: middle;">
-                                                        {{i.app_method}}
-                                                    </td>
-                                                    <td style="vertical-align: middle;">
-                                                        {{i.material}}
-                                                    </td>
-                                                    <td style="vertical-align: middle;">
-                                                        {{i.production_status}}
-                                                    </td>
-                                                    {%if design1%}
-                                                    <td style="vertical-align: middle;">
-                                                        {{i.designer_date}}
-                                                    </td>
-                                                    <td style="vertical-align: middle;">
-                                                        <a href="/designer/technical_requirement/{{i.design_specification.id}}">{{i.design_specification }}</a>
-                                                    </td>
-                                                    {%else%}
-                                                    <td style="vertical-align: middle;">
-                                                        {{i.designer.id}}
-                                                        {{i.designer.designer_date}}
-                                                    </td>
-                                                    {%endif%}
-                                                    <td style="vertical-align: middle;">
-                                                        <a href="/designer/order/{{order_id.id}}/position/{{i.id}}"><i class="fa fa-comments-o" aria-hidden="true"></i></a>
-                                                    </td>
-                                                    <td style="vertical-align: middle;">
-                                                        <a href="/designer/files/order/{{order_id.id}}/position/{{i.id}}">Загрузить <i class="fa fa-upload" aria-hidden="true"></i></a>
-                                                    </td>
-                                                </tr>
-                                                {% endfor %}
-                                            </table>
-                                        </div>
-                                            {%if design1%}
-                                            {%else%}
-                                            <div class="text-right">
-                                            <button type="submit" class="btn btn-primary" name="send_date">Отправить</button>
-                                            </div>
-                                            {%endif%}
-                                            </form> 
-                                            <div class="text-right">
-                                            <b>Мотивация:</b> {{designer_motivation}} руб. (1% от суммы заказа)
-                                            </div>
-                                </div>
-                            </div>
-                            </div>
-                            </div>
-                            {%if design1%}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="panel">
                                         <div class="panel-heading">
-                                            <h3 class="panel-title"><b>{{position.item}} - {{position.material}} - {{position.app_method}}</b></h3>
-                                            {%if files%}
-                                        </div>
-                                        <div class="panel-body">
-                                            <h3 class="panel-title">Файлы для производства:</h3> <br>
-                                            {%for file in files%}
-                                            <form method="POST" id="send_delete_{{file.id}}">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="file_id" value="{{file.id}}">
-                                            </form>
-                                            <a href="{{file.file.url}}">{{file.file}}</a> - <a style="color: #ff7979; cursor: pointer;" onclick="document.getElementById('send_delete_{{file.id}}').submit(); return false;">Удалить</a> <br>
-                                            {%endfor%}
-                                            {%endif%}
+                                            <h3 class="panel-title"><b>{{position.item}} / {{position.material}} / {{position.app_method}}</b></h3>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {%endif%}
-                            <!-- Сопроводительные документы -->
-<!--                            <div class="row">
+                            <div class="row">
                                 <div class="col-md-12">
-                                    <div class="panel">
-                                        <div class="panel-heading">
-                                            <h3 class="panel-title">Сопроводительные документы:</h3>
-                                        </div>
-                                        <div class="panel-body">
-                                            {%for doc in docs%}
-                                                <b>{{doc.title}}</b><br>
-                                                <a href="{{doc.file.url}}">{{doc.file}}</a> <br>
-                                                <i>{{doc.discription}}</i>
-                                                <hr>
-                                            {%endfor%}
-                                        </div>
-                                        <div class="panel-footer">
-                                            <form method="POST" enctype="multipart/form-data">
-                                                {% csrf_token %}
-                                                {{order_edit.title}} <br>
-                                                {{order_edit.discription}} <br>
-                                                {{order_edit.file}} <br>
-                                                    <button type="submit" class="btn btn-primary" name="docs">Отправить</button>
-                                            </form>
+                                    <div>
+                                        <div class="panel">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title" style="cursor:pointer; color:#a4aeb9;" onclick="view('t_task')"><i class="fa fa-caret-right" aria-hidden="true"></i> <b><i>Техническое задание: </b></i></h3>
+                                            </div>
+                                            <div id="t_task" class="panel-body" style="display: none">
+                                                <h3>{{position.design_requirements_new.title}}</h3>
+                                                {{position.design_requirements_new.technical_task|safe}}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> -->
-                            <!-- Сопроводительные документы -->
-                        </div>
-
-                        <!-- Комментарии к заказу -->
-                            <div class="col-md-4">
-                            <div class="panel panel-scrolling">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Комментарии к заказу: </h3>
-                                </div>
-                                <div class="panel-body">
-                                    {%for comment in order_comment%}
-                                        <b>{{comment.user.first_name}} {{comment.user.last_name}}:</b> <br> {{comment.comment}} <br>
-                                    {%endfor%}
-                                </div>
-                                <div class="panel-footer">
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <div class="input-group">
-                                            <input class="form-control" type="text" name="comment"}>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-primary" type="submit" name="add_order_comment"> > > > </button></span>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div>
+                                        <div class="panel">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title" style="cursor:pointer; color:#a4aeb9;" onclick="view('t_req')"><i class="fa fa-caret-right" aria-hidden="true"></i> <b><i>Техническое требование:</b></i></h3>
+                                            </div>
+                                            <div id="t_req" class="panel-body" style="display: none">
+                                                <h3>{{position.design_specification_new.title}}</h3>
+                                                {{position.design_specification_new.technical_req|safe}}
+                                            </div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
-                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <textarea style="height: auto; width: 100%"></textarea>
+                        </div>
                     </div>
-
                 </div>
-                <div class="container-fluid">
-                    {%if design1%}
+
+            <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6">
 
@@ -203,16 +98,24 @@
                                                     <div class="row">
                                                         <div class="col-md-12"> 
                                                             {%if design_img1.picture%}
-                                                            <a href="{{design_img1.picture.url}}"><img src="{{design_img1.picture.url}}" class="img-responsive"></a>
+                                                            <a href="{{design_img1.picture.url}}"><img src="{{design_img1.picture.url}}" class="img-responsive" style="max-height: 100%"></a>
                                                             {%endif%}
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {%else%}
+                                            <div class="panel empty_design1">
+                                                <div class="panel-heading">
+                                                    <div class="panel-body">
+                                                        <h3 class="text-center"><i class="fa fa-picture-o" aria-hidden="true" style="font-size: 50px;"></i></h3>
                                                     </div>
                                                 </div>
                                             </div>
                                             {%endif%}
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="panel">
+                                            <div class="panel edit_design1">
                                                 <div class="panel-heading">
                                                     <div class="panel-title">
                                                     Загрузка дизайна №1
@@ -260,10 +163,18 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {%else%}
+                                            <div class="panel empty_design2">
+                                                <div class="panel-heading">
+                                                    <div class="panel-body">
+                                                        <h3 class="text-center"><i class="fa fa-picture-o" aria-hidden="true" style="font-size: 50px;"></i></h3>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             {%endif%}
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="panel">
+                                            <div class="panel edit_design2">
                                                 <div class="panel-heading">
                                                     <div class="panel-title">
                                                     Загрузка дизайна №2
@@ -310,10 +221,17 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {%else%}
+                                            <div class="panel empty_design3">
+                                                <div class="panel-heading">
+                                                    <div class="panel-body"></div>
+                                                    <h3 class="text-center"><i class="fa fa-picture-o" aria-hidden="true" style="font-size: 50px;"></i></h3>
+                                                </div>
+                                            </div>
                                             {%endif%}
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="panel">
+                                            <div class="panel edit_design3">
                                                 <div class="panel-heading">
                                                     <div class="panel-title">
                                                     Загрузка дизайна №3
@@ -360,11 +278,19 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {%else%}
+                                            <div class="panel empty_design4">
+                                                <div class="panel-heading">
+                                                    <div class="panel-body">
+                                                        <h3 class="text-center"><i class="fa fa-picture-o" aria-hidden="true" style="font-size: 50px;"></i></h3>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             {%endif%}
                                         </div>
 
                                         <div class="col-md-6">
-                                            <div class="panel">
+                                            <div class="panel edit_design4">
                                                 <div class="panel-heading">
                                                     <div class="panel-title">
                                                     Загрузка дизайна №4
@@ -421,12 +347,7 @@
                             </div>
                         </div>
                     </div>
-                    {%endif%}
-
                 </div>
-
-                    <!-- END OVERVIEW -->
-                </div>
-            </div>
-            <!-- END MAIN CONTENT -->
+           </div>
+                <!-- END MAIN CONTENT -->
 {% endblock %}

@@ -2476,9 +2476,93 @@ class ProductionDeleteTTasks(View):
 
 
 class Design(View):
+    template = 'designer/design.html'
 
-	def get(self, request, order_id, position_id):
-		pass
+    def get(self, request, order_id, position_id):
+        position = Order.objects.get(id=position_id)
+        try:
+            design1 = Design1Form(instance=Design1.objects.get(position=Order.objects.get(id=position_id)))
+        except:
+            design1 = Design1Form()
+        try:
+            design2 = Design2Form(instance=Design2.objects.get(position=Order.objects.get(id=position_id)))
+        except:
+            design2 = Design2Form()
+        try:
+            design3 = Design3Form(instance=Design3.objects.get(position=Order.objects.get(id=position_id)))
+        except:
+            design3 = Design3Form()
+        try:
+            design4 = Design4Form(instance=Design4.objects.get(position=Order.objects.get(id=position_id)))
+        except:
+            design4 = Design4Form()
+        upload_design = UploadDesign()
+        try: 
+            img1 = Design1.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img1 = ""
+        try: 
+            img2 = Design2.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img2 = ""
+        try: 
+            img3 = Design3.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img3 = ""
+        try: 
+            img4 = Design4.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img4 = ""
+        context = {
+            'design1': design1,
+            'design2': design2,
+            'design3': design3,
+            'design4': design4,
+            'design_img1': img1,
+            'design_img2': img2,
+            'design_img3': img3,
+            'design_img4': img4,
+            'active_home': 'active',
+            'position': position
+        }
+        return render(request, self.template, context)
 
-	def get(self, request, order_id, position_id):
-		pass
+
+    def post(self, request, order_id, position_id):
+        if 'add_design1' in request.POST:
+            try:
+                design1 = Design1Form(request.POST, request.FILES, instance=Design1.objects.get(position=Order.objects.get(id=position_id)))
+            except: 
+                design1 = Design1Form(request.POST, request.FILES)
+            if design1.is_valid():
+                d = design1.save(commit=False)
+                d.position = Order.objects.get(id=position_id)
+                d.save()
+        if 'add_design2' in request.POST:
+            try:
+                design2 = Design2Form(request.POST, request.FILES, instance=Design2.objects.get(position=Order.objects.get(id=position_id)))
+            except: 
+                design2 = Design2Form(request.POST, request.FILES)
+            if design2.is_valid():
+                d = design2.save(commit=False)
+                d.position = Order.objects.get(id=position_id)
+                d.save()
+        if 'add_design3' in request.POST:
+            try:
+                design3 = Design3Form(request.POST, request.FILES, instance=Design3.objects.get(position=Order.objects.get(id=position_id)))
+            except: 
+                design3 = Design3Form(request.POST, request.FILES)
+            if design3.is_valid():
+                d = design3.save(commit=False)
+                d.position = Order.objects.get(id=position_id)
+                d.save()
+        if 'add_design4' in request.POST:
+            try:
+                design4 = Design4Form(request.POST, request.FILES, instance=Design4.objects.get(position=Order.objects.get(id=position_id)))
+            except: 
+                design4 = Design4Form(request.POST, request.FILES)
+            if design4.is_valid():
+                d = design4.save(commit=False)
+                d.position = Order.objects.get(id=position_id)
+                d.save()
+        return HttpResponseRedirect(request.path)
