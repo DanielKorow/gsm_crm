@@ -1,4 +1,4 @@
-{% extends 'designer/base.html' %}
+{% extends 'production/base.html' %}
 {% block content %}
 <script type="text/javascript">
      $(document).ready(
@@ -111,9 +111,8 @@
             <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6">
-
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             {%if design_img1.picture%}
                                             <div class="panel">
                                                 <div class="panel-heading">
@@ -146,34 +145,12 @@
                                             </div>
                                             {%endif%}
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="panel edit_design1">
-                                                <div class="panel-heading">
-                                                    <div class="panel-title">
-                                                    Загрузка дизайна №1
-                                                    </div>
-                                                </div>
-                                                <div class='panel-body'>
-                                                    <div class="row">
-                                                        <div class="col-md-12"> 
-                                                            <form method="POST" enctype="multipart/form-data">
-                                                                {% csrf_token %}
-                                                            <i>Дизайн:</i><br>{{design1.picture}} <br>
-                                                            <i>На производство:</i> <br>{{design1.pruduction_file}} <br>
-                                                            Одобрено без правок: {{design1.confirm}} <br><br>
-                                                            <button type="submit" class="btn btn-primary" name="add_design1">Отправить</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
 
 
 
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             {%if design_img2.picture%}
                                             <div class="panel">
                                                 <div class="panel-heading">
@@ -206,33 +183,11 @@
                                             </div>
                                             {%endif%}
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="panel edit_design2">
-                                                <div class="panel-heading">
-                                                    <div class="panel-title">
-                                                    Загрузка дизайна №2
-                                                    </div>
-                                                </div>
-                                                <div class='panel-body'>
-                                                    <div class="row">
-                                                        <div class="col-md-12"> 
-                                                            <form method="POST" enctype="multipart/form-data">
-                                                                {% csrf_token %}
-                                                            <i>Дизайн:</i><br>{{design2.picture}} <br>
-                                                            <i>На производство:</i> <br>{{design2.pruduction_file}} <br>
-                                                            Одобрено без правок: {{design2.confirm}} <br><br>
-                                                            <button type="submit" class="btn btn-primary" name="add_design2">Отправить</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
 
 
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             {%if design_img3.picture%}
                                             <div class="panel">
                                                 <div class="panel-heading">
@@ -264,33 +219,11 @@
                                             </div>
                                             {%endif%}
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="panel edit_design3">
-                                                <div class="panel-heading">
-                                                    <div class="panel-title">
-                                                    Загрузка дизайна №3
-                                                    </div>
-                                                </div>
-                                                <div class='panel-body'>
-                                                    <div class="row">
-                                                        <div class="col-md-12"> 
-                                                            <form method="POST" enctype="multipart/form-data">
-                                                                {% csrf_token %}
-                                                            <i>Дизайн:</i><br>{{design3.picture}} <br>
-                                                            <i>На производство:</i> <br>{{design3.pruduction_file}} <br>
-                                                            Одобрено без правок: {{design3.confirm}} <br><br>
-                                                            <button type="submit" class="btn btn-primary" name="add_design3">Отправить</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
 
 
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             {%if design_img4.picture%}
                                             <div class="panel">
                                                 <div class="panel-heading">
@@ -322,29 +255,6 @@
                                                 </div>
                                             </div>
                                             {%endif%}
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="panel edit_design4">
-                                                <div class="panel-heading">
-                                                    <div class="panel-title">
-                                                    Загрузка дизайна №4
-                                                    </div>
-                                                </div>
-                                                <div class='panel-body'>
-                                                    <div class="row">
-                                                        <div class="col-md-12"> 
-                                                            <form method="POST" enctype="multipart/form-data">
-                                                                {% csrf_token %}
-                                                            <i>Дизайн:</i> <br> {{design4.picture}} <br>
-                                                            <i>На производство:</i> <br>{{design4.pruduction_file}} <br>
-                                                            Одобрено без правок: {{design4.confirm}} <br><br>
-                                                            <button type="submit" class="btn btn-primary" name="add_design4">Отправить</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                         </div>

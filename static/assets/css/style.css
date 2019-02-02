@@ -5,3 +5,19 @@
 .addition_cost {
 	width: 50%!important;
 }
+
+.chat_view_order {
+	overflow-y: scroll;
+	background-color: white;
+	border: solid 1px #b9b8b8;
+	height: 300px;
+	padding: 10px;
+}
+
+.chat_view_position {
+	overflow-y: scroll;
+	background-color: white;
+	border: solid 1px #b9b8b8;
+	height: 600px;
+	padding: 10px;
+}

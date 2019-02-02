@@ -40,12 +40,6 @@
                                                     <th>
                                                         Дата готовности
                                                     </th>
-                                                    <th>
-                                                        Дизайн
-                                                    </th>
-                                                    <th>
-                                                        Производство
-                                                    </th>
                                                 </tr>
                                                 {% for i in order%}
                                                 <tr class="text-center" style="cursor: pointer" onclick="location.href='/designer/design/{{order_id.id}}/{{i.id}}'">
@@ -77,12 +71,6 @@
                                                         {{i.designer.designer_date}}
                                                     </td>
                                                     {%endif%}
-                                                    <td style="vertical-align: middle;">
-                                                        <a href="/designer/order/{{order_id.id}}/position/{{i.id}}"><i class="fa fa-comments-o" aria-hidden="true"></i></a>
-                                                    </td>
-                                                    <td style="vertical-align: middle;">
-                                                        <a href="/designer/files/order/{{order_id.id}}/position/{{i.id}}">Загрузить <i class="fa fa-upload" aria-hidden="true"></i></a>
-                                                    </td>
                                                 </tr>
                                                 {% endfor %}
                                             </table>

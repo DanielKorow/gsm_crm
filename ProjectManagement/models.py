@@ -521,6 +521,7 @@ class Design1(models.Model):
     picture = models.ImageField(null=True, blank=True, upload_to="Picture_design/Desing_1")
     confirm = models.BooleanField(blank=True)
     position = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
+    pruduction_file = models.FileField(upload_to="Production_Files", blank=True, null=True)
 
 
 class Design1_comment(models.Model):
@@ -550,6 +551,7 @@ class Design2(models.Model):
     picture = models.ImageField(null=True, blank=True, upload_to="Picture_design/Desing_2")
     confirm = models.BooleanField(blank=True)
     position = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
+    pruduction_file = models.FileField(upload_to="Production_Files", blank=True, null=True)
 
 
 class Design2_comment(models.Model):
@@ -579,6 +581,7 @@ class Design3(models.Model):
     picture = models.ImageField(null=True, blank=True, upload_to="Picture_design/Desing_3")
     confirm = models.BooleanField(blank=True)
     position = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
+    pruduction_file = models.FileField(upload_to="Production_Files", blank=True, null=True)
 
 
 class Design3_comment(models.Model):
@@ -608,6 +611,7 @@ class Design4(models.Model):
     picture = models.ImageField(null=True, blank=True, upload_to="Picture_design/Desing_4")
     confirm = models.BooleanField(blank=True)
     position = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
+    pruduction_file = models.FileField(upload_to="Production_Files", blank=True, null=True)
 
 
 class Design4_comment(models.Model):

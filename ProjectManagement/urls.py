@@ -35,7 +35,8 @@ urlpatterns = [
     path('manager/logistic_companies', login_required(Manager_logistic_companies.as_view())),
     path('manager/order/<int:pk>/done', login_required(ManagerOrderDone.as_view())),
     path('manager/design/<int:pk>', login_required(ManagerDesign.as_view())),
-    path('manager/design/order/<int:order_pk>/position/<int:position_pk>', login_required(ManagerPositionDesign.as_view())),
+    # path('manager/design/order/<int:order_pk>/position/<int:position_pk>', login_required(ManagerPositionDesign.as_view())),
+    path('manager/design/<int:order_id>/<int:position_id>', login_required(ManagerPositionDesign.as_view())), #Новый дизайн для позиции
     path('production', login_required(Production.as_view())),
     path('production/orders/<str:status>', login_required(Production_orders.as_view())),
     path('production/orders/edit/<int:pk>', login_required(Production_orders_edit.as_view())),
@@ -45,7 +46,8 @@ urlpatterns = [
     path('production/providers/add', login_required(Providers_add.as_view())),
     path('production/providers/change/<int:pk>', login_required(Providers_change.as_view())),
     path('production/design/<int:pk>', login_required(ProductionDesign.as_view())),
-    path('production/design/order/<int:order_pk>/position/<int:position_pk>', login_required(ProductionPositionDesign.as_view())),
+    # path('production/design/order/<int:order_pk>/position/<int:position_pk>', login_required(ProductionPositionDesign.as_view())),
+    path('production/design/<int:order_id>/<int:position_id>', login_required(ProductionPositionDesign.as_view())), #Новый дизайн для позиции
     path('production/specifications', login_required(Production_specifications.as_view())),
     path('production/specifications/add', login_required(Production_specifications_add.as_view())),
     path('production/specification/remove/<int:pk>', login_required(Production_specifications_remove.as_view())),
@@ -79,6 +81,7 @@ urlpatterns = [
     path('designer/items', login_required(DesignerItems.as_view())),
     path('designer/clients', login_required(DesignerClients.as_view())),
     path('designer/client/<int:pk>', login_required(DesignerClientData.as_view())),
+    path('designer/client_profile/change/<int:pk>', login_required(ChangeClientProfileDesigner.as_view())),
     path('logist', login_required(Logist.as_view())),
     path('logist/orders/<str:status>', login_required(Logist_orders.as_view())),
     path('logist/orders/edit/<int:pk>', login_required(LogistOrderEdit.as_view())),

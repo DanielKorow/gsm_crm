@@ -2250,6 +2250,8 @@ class ClientSelfProfileChange(View):
 class ChangeClientProfileManager(View):
     template = 'manager/change_client_profile.html'
 
+
+    @method_decorator(permission_required('auth.manage_clients'))
     def get(self, request, pk):
         client_profile = ClientProfile.objects.get(id=pk)
         client_profile_form = ClientProfileManagerForm(instance=client_profile)
@@ -2260,6 +2262,8 @@ class ChangeClientProfileManager(View):
         }
         return render(request, self.template, context)
 
+
+    @method_decorator(permission_required('auth.manage_clients'))
     def post(self, request, pk):
         client_profile = ClientProfile.objects.get(id=pk)
         client_profile_form = ClientProfileManagerForm(request.POST, instance=client_profile)
@@ -2566,3 +2570,88 @@ class Design(View):
                 d.position = Order.objects.get(id=position_id)
                 d.save()
         return HttpResponseRedirect(request.path)
+
+
+class ProductionPositionDesign(View):
+    template = 'production/design.html'
+
+    def get(self, request, order_id, position_id):
+        position = Order.objects.get(id=position_id)
+        try: 
+            img1 = Design1.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img1 = ""
+        try: 
+            img2 = Design2.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img2 = ""
+        try: 
+            img3 = Design3.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img3 = ""
+        try: 
+            img4 = Design4.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img4 = ""
+        context = {
+            'design_img1': img1,
+            'design_img2': img2,
+            'design_img3': img3,
+            'design_img4': img4,
+            'active_home': 'active',
+            'position': position
+        }
+        return render(request, self.template, context)
+
+
+class ManagerPositionDesign(View):
+    template = 'manager/design.html'
+
+    def get(self, request, order_id, position_id):
+        position = Order.objects.get(id=position_id)
+        try: 
+            img1 = Design1.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img1 = ""
+        try: 
+            img2 = Design2.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img2 = ""
+        try: 
+            img3 = Design3.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img3 = ""
+        try: 
+            img4 = Design4.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img4 = ""
+        context = {
+            'design_img1': img1,
+            'design_img2': img2,
+            'design_img3': img3,
+            'design_img4': img4,
+            'active_orders': 'active',
+            'position': position
+        }
+        return render(request, self.template, context)
+
+
+class ChangeClientProfileDesigner(View):
+    template = 'designer/change_client_profile.html'
+
+    def get(self, request, pk):
+        client_profile = ClientProfile.objects.get(id=pk)
+        client_profile_form = ClientProfileManagerForm(instance=client_profile)
+        context = {
+            'active_clients': 'active',
+            'client_profile': client_profile,
+            'client_profile_form': client_profile_form,
+        }
+        return render(request, self.template, context)
+
+    def post(self, request, pk):
+        client_profile = ClientProfile.objects.get(id=pk)
+        client_profile_form = ClientProfileManagerForm(request.POST, instance=client_profile)
+        if client_profile_form.is_valid():
+            client_profile_form.save()
+        return HttpResponseRedirect('/designer/client/{0}'.format(pk))

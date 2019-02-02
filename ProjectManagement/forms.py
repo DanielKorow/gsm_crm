@@ -157,25 +157,25 @@ class ClientBrandbookForm(forms.ModelForm):
 class Design1Form(forms.ModelForm):
     class Meta:
         model = Design1
-        fields = ('picture', 'confirm')
+        fields = ('picture', 'confirm', 'pruduction_file')
     
 
 class Design2Form(forms.ModelForm):
     class Meta:
         model = Design2
-        fields = ('picture', 'confirm')
+        fields = ('picture', 'confirm', 'pruduction_file')
 
 
 class Design3Form(forms.ModelForm):
     class Meta:
         model = Design3
-        fields = ('picture', 'confirm')
+        fields = ('picture', 'confirm', 'pruduction_file')
 
 
 class Design4Form(forms.ModelForm):
     class Meta:
         model = Design4
-        fields = ('picture', 'confirm')
+        fields = ('picture', 'confirm', 'pruduction_file')
 
 
 class ManagerAddingCostForm(forms.ModelForm):
