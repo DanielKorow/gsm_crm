@@ -1398,7 +1398,7 @@ class Designer_orders_edit(View):
             'order_edit': order_edit,
             'docs': docs,
             'order': new_order,
-            'order_comment': OrderComment.objects.filter(order=order_id),
+            'order_comment': NewChatOrder.objects.filter(order=order_id),
             'designer_motivation': OrderNumber.objects.calculate_designer_motivation(pk),
             'formset': formset, 
         }

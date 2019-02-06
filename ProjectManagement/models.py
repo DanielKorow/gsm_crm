@@ -711,3 +711,37 @@ class ProductionTTask(models.Model):
 
     title = models.CharField(max_length=200, blank=True, null=True)
     technical_task = models.TextField()
+
+
+class NewChatOrder(models.Model):
+
+    class Meta:
+        verbose_name = "NewChatOrder"
+        verbose_name_plural = "NewChatOrders"
+
+    def __str__(self):
+        pass
+
+    order = models.ForeignKey(OrderNumber, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    message = models.CharField(blank=True, null=True, max_length=3000)
+    file = models.FileField(blank=True, null=True, upload_to='chat/files/{0}/{1}'.format(user, order))
+    image = models.ImageField(blank=True, null=True,upload_to='chat/images/{0}/{1}'.format(user, order))
+    read = models.BooleanField(default=False)
+
+
+class NewCharPosition(models.Model):
+
+    class Meta:
+        verbose_name = "NewCharPosition"
+        verbose_name_plural = "NewCharPositions"
+
+    def __str__(self):
+        pass
+    
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    message = models.CharField(blank=True, null=True, max_length=3000)
+    file = models.FileField(blank=True, null=True, upload_to='chat/files/{0}/{1}'.format(user, order))
+    image = models.ImageField(blank=True, null=True,upload_to='chat/images/{0}/{1}'.format(user, order))
+    read = models.BooleanField(default=False)

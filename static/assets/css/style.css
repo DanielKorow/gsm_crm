@@ -21,3 +21,16 @@
 	height: 600px;
 	padding: 10px;
 }
+
+.chat_input_and_button {
+	border: solid 1px #b9b8b8;
+}
+
+.new_chat_box {
+	background-color: white;
+	box-shadow: 0 0 5px rgba(122,122,122,0.2);;
+}
+
+.new-msg {
+	background-color: #e2e2e26b;
+}
