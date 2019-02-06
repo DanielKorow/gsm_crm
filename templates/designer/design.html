@@ -97,7 +97,10 @@
                                        <b>Чат заказа:</b>
                                     </div>
                                     <div class="chat_view_order chat-scroll" id="chat-log-order">
-
+                                        {%for i in order_chat%}
+                                            <div class="msg"><b>{{i.user.first_name}} {{i.user.last_name}}</b>:<br>
+                                            {{i.message}}<br></div>
+                                        {%endfor%}
                                     </div>
                                 </div>
                             </div>
@@ -365,7 +368,10 @@
                                        <b>Чат позиции:</b>
                                     </div>
                                     <div class="chat_view_position chat-scroll" id="chat-log-position">
-
+                                        {%for i in position_chat%}
+                                            <div class="msg"><b>{{i.user.first_name}} {{i.user.last_name}}</b>:<br>
+                                            {{i.message}}<br></div>
+                                        {%endfor%}
                                     </div>
                                 </div>
                             </div>

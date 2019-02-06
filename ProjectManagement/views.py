@@ -2527,6 +2527,8 @@ class Design(View):
             'design_img3': img3,
             'design_img4': img4,
             'active_home': 'active',
+            'order_chat': NewChatOrder.objects.filter(order=order_id),
+            'position_chat': NewChatPosition.objects.filter(position=position_id),
             'position': position
         }
         return render(request, self.template, context)

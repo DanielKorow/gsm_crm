@@ -18,7 +18,7 @@
                 var message = data['message'];
                 var obj_user = data['obj_user']
                 $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + message + "<br></div>");
-                $(".msg").addClass("new-msg");
+                // $(".msg").addClass("new-msg");
                 scrollfunc();
             };
 

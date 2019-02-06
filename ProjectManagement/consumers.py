@@ -81,22 +81,31 @@ class PositionNumberConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-
+        id_user = text_data_json['id_user']
+        order_id = text_data_json['id'] 
+        user_data = serializers.serialize("json", User.objects.filter(id=id_user))
+        user_data_json = json.loads(user_data)
+        username = user_data_json[0]
+        chat_save = NewChatPosition(position=Order.objects.get(id=order_id), message=message, user=User.objects.get(id=id_user))
+        chat_save.save()
         # Send message to room group
         await self.channel_layer.group_send(
             self.position_group_name,
             {
                 'type': 'chat_message',
-                'message': message
+                'message': message,
+                'obj_user': username['fields']['first_name'] + " " + username['fields']['last_name'],
             }
         )
 
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
+        obj_user = event['obj_user']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            'message': message
+            'message': message,
+            'obj_user': obj_user,
         }))
 
