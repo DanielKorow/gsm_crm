@@ -3,6 +3,8 @@ import json
 from . models import *
 from django.contrib.auth.models import User
 from django.core import serializers
+from channels.db import database_sync_to_async
+
 
 class OrderNumberConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -30,20 +32,25 @@ class OrderNumberConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         id_user = text_data_json['id_user']
         order_id = text_data_json['id'] 
-        user_data = serializers.serialize("json", User.objects.filter(id=id_user))
-        user_data_json = json.loads(user_data)
-        username = user_data_json[0]
-        chat_save = NewChatOrder(order=OrderNumber.objects.get(id=order_id), message=message, user=User.objects.get(id=id_user))
-        chat_save.save()
-        # Send message to room group
+        await self.save_msg(order_id, id_user, message)
         await self.channel_layer.group_send(
             self.order_group_name,
             {
                 'type': 'chat_message',
                 'message': message,
-                'obj_user': username['fields']['first_name'] + " " + username['fields']['last_name'],
+                'obj_user': await self.get_user(id_user)
             }
         )
+
+    @database_sync_to_async
+    def save_msg(self, order_id, id_user, message):
+        chat_save = NewChatOrder(order=OrderNumber.objects.get(id=order_id), message=message, user=User.objects.get(id=id_user))
+        chat_save.save()
+
+    @database_sync_to_async
+    def get_user(self, id_user):
+        return User.objects.get(id=id_user).first_name + " " + User.objects.get(id=id_user).last_name
+
 
     # Receive message from room group
     async def chat_message(self, event):
@@ -80,32 +87,40 @@ class PositionNumberConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
+        image = text_data_json['image']
         message = text_data_json['message']
         id_user = text_data_json['id_user']
         order_id = text_data_json['id'] 
-        user_data = serializers.serialize("json", User.objects.filter(id=id_user))
-        user_data_json = json.loads(user_data)
-        username = user_data_json[0]
-        chat_save = NewChatPosition(position=Order.objects.get(id=order_id), message=message, user=User.objects.get(id=id_user))
-        chat_save.save()
-        # Send message to room group
+        await self.save_msg(order_id, id_user, message, image)
         await self.channel_layer.group_send(
             self.position_group_name,
             {
                 'type': 'chat_message',
+                'image': image,
                 'message': message,
-                'obj_user': username['fields']['first_name'] + " " + username['fields']['last_name'],
+                'obj_user': await self.get_user(id_user),
             }
         )
+
+
+    @database_sync_to_async
+    def save_msg(self, order_id, id_user, message, image):
+        chat_save = NewChatPosition(position=Order.objects.get(id=order_id), message=message, user=User.objects.get(id=id_user), image=image)
+        chat_save.save()
+
+    @database_sync_to_async
+    def get_user(self, id_user):
+        return User.objects.get(id=id_user).first_name + " " + User.objects.get(id=id_user).last_name
 
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
         obj_user = event['obj_user']
+        image = event['image']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
+            'image': image,
             'message': message,
             'obj_user': obj_user,
         }))
-

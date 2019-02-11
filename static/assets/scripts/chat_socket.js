@@ -6,23 +6,28 @@
         }
     }
 
-    function orderNumberChat(id, type, id_user){
+    function orderNumberChat(id, type, id_user, des1, des2, des3, des4){
             var idNumber = id;
 
             var chatSocket = new WebSocket(
                 'ws://' + 'client.gsmagency.ru:1122' +
                 '/ws/'+ type + '/' + idNumber + '/');
-
             chatSocket.onmessage = function(e) {
                 var data = JSON.parse(e.data);
                 var message = data['message'];
                 var obj_user = data['obj_user']
+                var image = data['image']
+                if (message != "") {
                 $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + message + "<br></div>");
+                }
+                if (image != ""){
+                $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + "<img class='img-responsive' src='/media/" + image + "'><br>");
+                }
                 // $(".msg").addClass("new-msg");
                 scrollfunc();
             };
 
-            document.querySelector('#chat-message-input-order').focus();
+            // document.querySelector('#chat-message-input-order').focus();
             document.querySelector('#chat-message-input' + '-' + type).onkeyup = function(e) {
                 if (e.keyCode === 13) {  // enter, return
                     document.querySelector('#chat-message-submit' + '-' + type).click();
@@ -32,12 +37,72 @@
             document.querySelector('#chat-message-submit' + '-' + type).onclick = function(e) {
             var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
             var message = messageInputDom.value;
+            if (message != "") {
             chatSocket.send(JSON.stringify({
+                'image': '',
                 'message': message,
                 'id_user': id_user, 
                 'id': id,
             }));
+            messageInputDom.value = '';
+        };}
 
+            // Первый дизайн
+            document.querySelector("#position_img1_to_socket").onclick = function(e){
+                var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
+                var message = messageInputDom.value;
+                chatSocket.send(JSON.stringify({
+                'image': des1,
+                'message': message,
+                'id_user': id_user, 
+                'id': id,
+
+            }));
             messageInputDom.value = '';
             };
-        }
+
+            // Второй дизайн
+            document.querySelector("#position_img2_to_socket").onclick = function(e){
+                var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
+                var message = messageInputDom.value;
+                chatSocket.send(JSON.stringify({
+                'image': des2,
+                'message': message,
+                'id_user': id_user, 
+                'id': id,
+
+            }));
+            messageInputDom.value = '';
+            };
+
+            // Третий дизайн
+
+            document.querySelector("#position_img3_to_socket").onclick = function(e){
+                var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
+                var message = messageInputDom.value;
+                chatSocket.send(JSON.stringify({
+                'image': des3,
+                'message': message,
+                'id_user': id_user, 
+                'id': id,
+
+            }));
+            messageInputDom.value = '';
+            };
+
+            // Четвертый дизайн
+
+            document.querySelector("#position_img4_to_socket").onclick = function(e){
+                var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
+                var message = messageInputDom.value;
+                chatSocket.send(JSON.stringify({
+                'image': des4,
+                'message': message,
+                'id_user': id_user, 
+                'id': id,
+
+            }));
+            messageInputDom.value = '';
+            };
+
+        };

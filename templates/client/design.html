@@ -1,7 +1,7 @@
-{% extends 'designer/base.html' %}
+{% extends 'client/base.html' %}
 {% block content %}
 <script type="text/javascript">
-    $(document).ready(
+     $(document).ready(
         function(){
             edit_height = $('.edit_design1').height()
             $('.empty_design1').height(edit_height);
@@ -21,12 +21,14 @@
         else {
              v.style.display = 'none';
         }
+
     }
 
     $(document).ready(
         function(){
             var elem = document.getElementsByClassName('chat-scroll');
             var i;
+            console.log(elem.lenght);
             for (i in elem) {
                 elem[i].scrollTop = elem[i].scrollHeight;
             }
@@ -34,20 +36,16 @@
 
     $(document).ready(
     function(){
-       orderNumberChat({{position.order.id}}, 'order', {{user.id}}, "{{design_img1.picture}}", "{{design_img2.picture}}", "{{design_img3.picture}}", "{{design_img4.picture}}");
-    });
-
-    $(document).ready(
-    function(){
        orderNumberChat({{position.id}}, 'position', {{user.id}}, "{{design_img1.picture}}", "{{design_img2.picture}}", "{{design_img3.picture}}", "{{design_img4.picture}}");
     });
+
 </script>
             <!-- MAIN CONTENT -->
             <div class="main-content">
                 <div class="container-fluid">
                     <!-- OVERVIEW -->
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="panel">
@@ -57,75 +55,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div>
-                                        <div class="panel">
-                                            <div class="panel-heading">
-                                                <h3 class="panel-title" style="cursor:pointer; color:#a4aeb9;" onclick="view('t_task')"><i class="fa fa-caret-right" aria-hidden="true"></i> <b><i>Техническое задание: </b></i></h3>
-                                            </div>
-                                            <div id="t_task" class="panel-body" style="display: none">
-                                                <h3>{{position.design_requirements_new.title}}</h3>
-                                                {{position.design_requirements_new.technical_task|safe}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div>
-                                        <div class="panel">
-                                            <div class="panel-heading">
-                                                <h3 class="panel-title" style="cursor:pointer; color:#a4aeb9;" onclick="view('t_req')"><i class="fa fa-caret-right" aria-hidden="true"></i> <b><i>Техническое требование:</b></i></h3>
-                                            </div>
-                                            <div id="t_req" class="panel-body" style="display: none">
-                                                <h3>{{position.design_specification_new.title}}</h3>
-                                                {{position.design_specification_new.technical_req|safe}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 new_chat_box">
-                            <div class="row">
-                                <div class="col-md-12" style="padding-top: 10px;">
-                                    <div>
-                                       <b>Чат заказа:</b>
-                                    </div>
-                                    <div class="chat_view_order chat-scroll" id="chat-log-order">
-                                        {%for i in order_chat%}
-                                            <div class="msg"><b>{{i.user.first_name}} {{i.user.last_name}}</b>:<br>
-                                            {{i.message}}<br></div>
-                                        {%endfor%}
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <input class="chat_input_and_button" id="chat-message-input-order" type="text" style="width: 100%;"/>
-                                </div>    
-                                <div class="col-md-2 text-right">
-                                    <input class="chat_input_and_button" id="chat-message-submit-order" type="button" value=">>>"/>
-                                </div>
-                            </div> <br>
                         </div>
                     </div>
                 </div> <br>
 
-                <script type="text/javascript">
-
-                </script>
-
             <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6">
-
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             {%if design_img1.picture%}
                                             <div class="panel">
                                                 <div class="panel-heading">
@@ -134,8 +72,8 @@
                                                     </div>
                                                     <form id='in_chat_img1' method="POST">
                                                         {% csrf_token %}
-                                                        <input id="send_position_img_1" type="hidden" name="img1_to_chat">
-                                                        <p id="position_img1_to_socket" class="panel-subtitle" style="cursor: pointer;">В чат >></p>
+                                                        <input type="hidden" name="img1_to_chat">
+                                                        <p class="panel-subtitle" id="position_img1_to_socket" style="cursor: pointer;">В чат >></p>
                                                     </form>
                                                 </div>
                                                 <div class='panel-body'>
@@ -144,6 +82,19 @@
                                                             {%if design_img1.picture%}
                                                             <a href="{{design_img1.picture.url}}"><img src="{{design_img1.picture.url}}" class="img-responsive" style="max-height: 100%"></a>
                                                             {%endif%}
+                                                            <div class="row">
+                                                                <div class="col-md-12 text-right">
+                                                                    {%if design_img1.confirm%}
+                                                                        <i class="fa fa-check" aria-hidden="true" style="color: green;"></i>
+                                                                    {%else%}
+                                                                    <form id='confirm_1_form' method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="confirm_1">
+                                                                        <p class="panel-subtitle" onclick="document.getElementById('confirm_1_form').submit();" style="cursor: pointer; color: green;">Одобрить без правок <i class="fa fa-check" aria-hidden="true"></i></p>
+                                                                    </form>
+                                                                    {%endif%}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -158,34 +109,12 @@
                                             </div>
                                             {%endif%}
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="panel edit_design1">
-                                                <div class="panel-heading">
-                                                    <div class="panel-title">
-                                                    Загрузка дизайна №1
-                                                    </div>
-                                                </div>
-                                                <div class='panel-body'>
-                                                    <div class="row">
-                                                        <div class="col-md-12"> 
-                                                            <form method="POST" enctype="multipart/form-data">
-                                                                {% csrf_token %}
-                                                            <i>Дизайн:</i><br>{{design1.picture}} <br>
-                                                            <i>На производство:</i> <br>{{design1.pruduction_file}} <br>
-                                                            Одобрено без правок: {{design1.confirm}} <br><br>
-                                                            <button type="submit" class="btn btn-primary" name="add_design1">Отправить</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
 
 
 
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             {%if design_img2.picture%}
                                             <div class="panel">
                                                 <div class="panel-heading">
@@ -195,7 +124,7 @@
                                                     <form id='in_chat_img2' method="POST">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="img2_to_chat">
-                                                        <p id="position_img2_to_socket" class="panel-subtitle" style="cursor: pointer;">В чат >></p>
+                                                        <p class="panel-subtitle" id="position_img2_to_socket" style="cursor: pointer;">В чат >></p>
                                                     </form>
                                                 </div>
                                                 <div class='panel-body'>
@@ -204,6 +133,19 @@
                                                             {%if design_img2.picture%}
                                                             <a href="{{design_img2.picture.url}}"><img src="{{design_img2.picture.url}}" class="img-responsive"></a>
                                                             {%endif%}
+                                                            <div class="row">
+                                                                <div class="col-md-12 text-right">
+                                                                    {%if design_img1.confirm%}
+                                                                        <i class="fa fa-check" aria-hidden="true" style="color: green;"></i>
+                                                                    {%else%}
+                                                                    <form id='confirm_2_form' method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="confirm_1">
+                                                                        <p class="panel-subtitle" onclick="document.getElementById('confirm_2_form').submit();" style="cursor: pointer; color: green;">Одобрить без правок <i class="fa fa-check" aria-hidden="true"></i></p>
+                                                                    </form>
+                                                                    {%endif%}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -218,33 +160,11 @@
                                             </div>
                                             {%endif%}
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="panel edit_design2">
-                                                <div class="panel-heading">
-                                                    <div class="panel-title">
-                                                    Загрузка дизайна №2
-                                                    </div>
-                                                </div>
-                                                <div class='panel-body'>
-                                                    <div class="row">
-                                                        <div class="col-md-12"> 
-                                                            <form method="POST" enctype="multipart/form-data">
-                                                                {% csrf_token %}
-                                                            <i>Дизайн:</i><br>{{design2.picture}} <br>
-                                                            <i>На производство:</i> <br>{{design2.pruduction_file}} <br>
-                                                            Одобрено без правок: {{design2.confirm}} <br><br>
-                                                            <button type="submit" class="btn btn-primary" name="add_design2">Отправить</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
 
 
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             {%if design_img3.picture%}
                                             <div class="panel">
                                                 <div class="panel-heading">
@@ -254,7 +174,7 @@
                                                     <form id='in_chat_img3' method="POST">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="img3_to_chat">
-                                                        <p id="position_img3_to_socket" class="panel-subtitle" style="cursor: pointer;">В чат >></p>
+                                                        <p class="panel-subtitle" id="position_img3_to_socket" style="cursor: pointer;">В чат >></p>
                                                     </form>
                                                 </div>
                                                 <div class='panel-body'>
@@ -263,6 +183,19 @@
                                                             {%if design_img3.picture%}
                                                             <a href="{{design_img3.picture.url}}"><img src="{{design_img3.picture.url}}" class="img-responsive"></a>
                                                             {%endif%}
+                                                            <div class="row">
+                                                                <div class="col-md-12 text-right">
+                                                                    {%if design_img3.confirm%}
+                                                                        <i class="fa fa-check" aria-hidden="true" style="color: green;"></i>
+                                                                    {%else%}
+                                                                    <form id='confirm_3_form' method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="confirm_1">
+                                                                        <p class="panel-subtitle" onclick="document.getElementById('confirm_3_form').submit();" style="cursor: pointer; color: green;">Одобрить без правок <i class="fa fa-check" aria-hidden="true"></i></p>
+                                                                    </form>
+                                                                    {%endif%}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -276,33 +209,11 @@
                                             </div>
                                             {%endif%}
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="panel edit_design3">
-                                                <div class="panel-heading">
-                                                    <div class="panel-title">
-                                                    Загрузка дизайна №3
-                                                    </div>
-                                                </div>
-                                                <div class='panel-body'>
-                                                    <div class="row">
-                                                        <div class="col-md-12"> 
-                                                            <form method="POST" enctype="multipart/form-data">
-                                                                {% csrf_token %}
-                                                            <i>Дизайн:</i><br>{{design3.picture}} <br>
-                                                            <i>На производство:</i> <br>{{design3.pruduction_file}} <br>
-                                                            Одобрено без правок: {{design3.confirm}} <br><br>
-                                                            <button type="submit" class="btn btn-primary" name="add_design3">Отправить</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
 
 
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             {%if design_img4.picture%}
                                             <div class="panel">
                                                 <div class="panel-heading">
@@ -312,7 +223,7 @@
                                                     <form id='in_chat_img4' method="POST">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="img4_to_chat">
-                                                        <p id="position_img4_to_socket" class="panel-subtitle" style="cursor: pointer;">В чат >></p>
+                                                        <p class="panel-subtitle" id="position_img4_to_socket" style="cursor: pointer;">В чат >></p>
                                                     </form>
                                                 </div>
                                                 <div class='panel-body'>
@@ -321,6 +232,19 @@
                                                             {%if design_img4.picture%}
                                                             <a href="{{design_img4.picture.url}}"><img src="{{design_img4.picture.url}}" class="img-responsive"></a>
                                                             {%endif%}
+                                                            <div class="row">
+                                                                <div class="col-md-12 text-right">
+                                                                    {%if design_img4.confirm%}
+                                                                        <i class="fa fa-check" aria-hidden="true" style="color: green;"></i>
+                                                                    {%else%}
+                                                                    <form id='confirm_4_form' method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="confirm_1">
+                                                                        <p class="panel-subtitle" onclick="document.getElementById('confirm_4_form').submit();" style="cursor: pointer; color: green;">Одобрить без правок <i class="fa fa-check" aria-hidden="true"></i></p>
+                                                                    </form>
+                                                                    {%endif%}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -334,29 +258,6 @@
                                                 </div>
                                             </div>
                                             {%endif%}
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="panel edit_design4">
-                                                <div class="panel-heading">
-                                                    <div class="panel-title">
-                                                    Загрузка дизайна №4
-                                                    </div>
-                                                </div>
-                                                <div class='panel-body'>
-                                                    <div class="row">
-                                                        <div class="col-md-12"> 
-                                                            <form method="POST" enctype="multipart/form-data">
-                                                                {% csrf_token %}
-                                                            <i>Дизайн:</i> <br> {{design4.picture}} <br>
-                                                            <i>На производство:</i> <br>{{design4.pruduction_file}} <br>
-                                                            Одобрено без правок: {{design4.confirm}} <br><br>
-                                                            <button type="submit" class="btn btn-primary" name="add_design4">Отправить</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                         </div>

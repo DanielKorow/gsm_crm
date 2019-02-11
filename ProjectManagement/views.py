@@ -602,6 +602,7 @@ class Orders_edit(View):
             'designer_motivation': OrderNumber.objects.calculate_designer_motivation(pk),
             'logist_fact': OrderNumber.objects.logist_price(pk),
             'addagr_form': addagr,
+            'order_chat': NewChatOrder.objects.filter(order=order_id),
         }
         return render(request, self.template, context)
 
@@ -983,6 +984,7 @@ class Production_orders_edit(View):
             'pre_payment': OrderNumber.objects.pre_payment(pk),
             'post_payment': OrderNumber.objects.post_payment(pk),
             'production_motivation': OrderNumber.objects.production_motivation(pk),
+            'order_chat': NewChatOrder.objects.filter(order=order_id),
         }
         return render(request, self.template, context)
 
@@ -1398,7 +1400,7 @@ class Designer_orders_edit(View):
             'order_edit': order_edit,
             'docs': docs,
             'order': new_order,
-            'order_comment': NewChatOrder.objects.filter(order=order_id),
+            'order_chat': NewChatOrder.objects.filter(order=order_id),
             'designer_motivation': OrderNumber.objects.calculate_designer_motivation(pk),
             'formset': formset, 
         }
@@ -1707,6 +1709,7 @@ class LogistOrderEdit(View):
             'difference': OrderNumber.objects.logist_difference(pk),
             'logist_price': OrderNumber.objects.logist_price(pk),
             'logist_price_form': logist_price,
+            'order_chat': NewChatOrder.objects.filter(order=order_id),
         }
         return render(request, self.template, context)
 
@@ -2571,6 +2574,34 @@ class Design(View):
                 d = design4.save(commit=False)
                 d.position = Order.objects.get(id=position_id)
                 d.save()
+        if 'img1_to_chat' in request.POST:
+            comment = NewChatPosition()
+            design = Design1.objects.get(position=Order.objects.get(id=position_id))
+            comment.image = design.picture
+            comment.user = auth.get_user(request)
+            comment.position = Order.objects.get(id=position_id)
+            comment.save()
+        if 'img2_to_chat' in request.POST:
+            comment = NewChatPosition()
+            design = Design2.objects.get(position=Order.objects.get(id=position_id))
+            comment.image = design.picture
+            comment.user = auth.get_user(request)
+            comment.position = Order.objects.get(id=position_id)
+            comment.save()
+        if 'img3_to_chat' in request.POST:
+            comment = NewChatPosition()
+            design = Design3.objects.get(position=Order.objects.get(id=position_id))
+            comment.image = design.picture
+            comment.user = auth.get_user(request)
+            comment.position = Order.objects.get(id=position_id)
+            comment.save()
+        if 'img4_to_chat' in request.POST:
+            comment = NewChatPosition()
+            design = Design4.objects.get(position=Order.objects.get(id=position_id))
+            comment.image = design.picture
+            comment.user = auth.get_user(request)
+            comment.position = Order.objects.get(id=position_id)
+            comment.save()
         return HttpResponseRedirect(request.path)
 
 
@@ -2601,7 +2632,9 @@ class ProductionPositionDesign(View):
             'design_img3': img3,
             'design_img4': img4,
             'active_home': 'active',
-            'position': position
+            'order_chat': NewChatOrder.objects.filter(order=order_id),
+            'position_chat': NewChatPosition.objects.filter(position=position_id),
+            'position': position,
         }
         return render(request, self.template, context)
 
@@ -2633,7 +2666,9 @@ class ManagerPositionDesign(View):
             'design_img3': img3,
             'design_img4': img4,
             'active_orders': 'active',
-            'position': position
+            'position': position,
+            'order_chat': NewChatOrder.objects.filter(order=order_id),
+            'position_chat': NewChatPosition.objects.filter(position=position_id),
         }
         return render(request, self.template, context)
 
@@ -2657,3 +2692,83 @@ class ChangeClientProfileDesigner(View):
         if client_profile_form.is_valid():
             client_profile_form.save()
         return HttpResponseRedirect('/designer/client/{0}'.format(pk))
+
+
+class ClientPositionDesign(View):
+    template = 'client/design.html'
+
+    def get(self, request, order_id, position_id):
+        position = Order.objects.get(id=position_id)
+        try: 
+            img1 = Design1.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img1 = ""
+        try: 
+            img2 = Design2.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img2 = ""
+        try: 
+            img3 = Design3.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img3 = ""
+        try: 
+            img4 = Design4.objects.get(position=Order.objects.get(id=position_id))
+        except:
+            img4 = ""
+        context = {
+            'design_img1': img1,
+            'design_img2': img2,
+            'design_img3': img3,
+            'design_img4': img4,
+            'active_home': 'active',
+            'position': position,
+            'position_chat': NewChatPosition.objects.filter(position=position_id),
+        }
+        return render(request, self.template, context)
+
+    def post(self, request, order_id, position_id):
+        if 'img1_to_chat' in request.POST:
+            comment = NewChatPosition()
+            design = Design1.objects.get(position=Order.objects.get(id=position_id))
+            comment.image = design.picture
+            comment.user = auth.get_user(request)
+            comment.position = Order.objects.get(id=position_id)
+            comment.save()
+        if 'img2_to_chat' in request.POST:
+            comment = NewChatPosition()
+            design = Design2.objects.get(position=Order.objects.get(id=position_id))
+            comment.image = design.picture
+            comment.user = auth.get_user(request)
+            comment.position = Order.objects.get(id=position_id)
+            comment.save()
+        if 'img3_to_chat' in request.POST:
+            comment = NewChatPosition()
+            design = Design3.objects.get(position=Order.objects.get(id=position_id))
+            comment.image = design.picture
+            comment.user = auth.get_user(request)
+            comment.position = Order.objects.get(id=position_id)
+            comment.save()
+        if 'img4_to_chat' in request.POST:
+            comment = NewChatPosition()
+            design = Design4.objects.get(position=Order.objects.get(id=position_id))
+            comment.image = design.picture
+            comment.user = auth.get_user(request)
+            comment.position = Order.objects.get(id=position_id)
+            comment.save()
+        if 'confirm_1' in request.POST:
+            design = Design1.objects.get(position=Order.objects.get(id=position_id))
+            design.confirm = True
+            design.save()
+        if 'confirm_2' in request.POST:
+            design = Design2.objects.get(position=Order.objects.get(id=position_id))
+            design.confirm = True
+            design.save()
+        if 'confirm_3' in request.POST:
+            design = Design3.objects.get(position=Order.objects.get(id=position_id))
+            design.confirm = True
+            design.save()
+        if 'confirm_4' in request.POST:
+            design = Design4.objects.get(position=Order.objects.get(id=position_id))
+            design.confirm = True
+            design.save()
+        return HttpResponseRedirect(request.path)
