@@ -42,7 +42,7 @@
 
     $(document).ready(
     function(){
-       orderNumberChat({{position.id}}, 'position', {{user.id}});
+       positionChat({{position.id}}, 'position', {{user.id}}, "{{design_img1.picture}}", "{{design_img2.picture}}", "{{design_img3.picture}}", "{{design_img4.picture}}");
     });
     
 </script>
@@ -133,7 +133,7 @@
                                                     <form id='in_chat_img1' method="POST">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="img1_to_chat">
-                                                        <p class="panel-subtitle" onclick="document.getElementById('in_chat_img1').submit();" style="cursor: pointer;">В чат >></p>
+                                                        <p class="panel-subtitle" id="position_img1_to_socket" style="cursor: pointer;">В чат >></p>
                                                     </form>
                                                 </div>
                                                 <div class='panel-body'>
@@ -171,7 +171,7 @@
                                                     <form id='in_chat_img2' method="POST">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="img2_to_chat">
-                                                        <p class="panel-subtitle" onclick="document.getElementById('in_chat_img2').submit();" style="cursor: pointer;">В чат >></p>
+                                                        <p class="panel-subtitle" id="position_img2_to_socket" style="cursor: pointer;">В чат >></p>
                                                     </form>
                                                 </div>
                                                 <div class='panel-body'>
@@ -208,7 +208,7 @@
                                                     <form id='in_chat_img3' method="POST">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="img3_to_chat">
-                                                        <p class="panel-subtitle" onclick="document.getElementById('in_chat_img3').submit();" style="cursor: pointer;">В чат >></p>
+                                                        <p class="panel-subtitle" id="position_img3_to_socket" style="cursor: pointer;">В чат >></p>
                                                     </form>
                                                 </div>
                                                 <div class='panel-body'>
@@ -244,7 +244,7 @@
                                                     <form id='in_chat_img4' method="POST">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="img4_to_chat">
-                                                        <p class="panel-subtitle" onclick="document.getElementById('in_chat_img4').submit();" style="cursor: pointer;">В чат >></p>
+                                                        <p class="panel-subtitle" id="position_img4_to_socket" style="cursor: pointer;">В чат >></p>
                                                     </form>
                                                 </div>
                                                 <div class='panel-body'>
@@ -278,7 +278,11 @@
                                     <div class="chat_view_position chat-scroll" id="chat-log-position">
                                         {%for i in position_chat%}
                                             <div class="msg"><b>{{i.user.first_name}} {{i.user.last_name}}</b>:<br>
-                                            {{i.message}}<br></div>
+                                            {%if i.message%}{{i.message}}<br>{%endif%}
+                                            {%if i.image%}
+                                            <img src="{{i.image.url}}" class="img-responsive"><br>
+                                            {%endif%}
+                                            </div>
                                         {%endfor%}
                                     </div>
                                 </div>
