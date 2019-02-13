@@ -299,3 +299,15 @@ class DesignerTTaskForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': "form-control", }),
             'technical_task': SummernoteWidget(),
         }
+
+
+class FilesForChatForm(forms.ModelForm):
+    class Meta:
+        model = FilesForChat
+        fields = ('file',)
+
+        widgets = {
+            'file': forms.FileInput(),
+        }
+
+    

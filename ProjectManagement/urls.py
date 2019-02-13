@@ -102,4 +102,5 @@ urlpatterns = [
     path('client/orders/edit/<int:pk>', login_required(ClientOrders_edit.as_view())),
     path('client/brand/delete/<int:pk>', login_required(RemoveBrandbook.as_view())),
     path('client/design/<int:order_id>/<int:position_id>', login_required(ClientPositionDesign.as_view())),
+    path('chatfile/delete/<int:pk>', login_required(ChatFileDelete.as_view())),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

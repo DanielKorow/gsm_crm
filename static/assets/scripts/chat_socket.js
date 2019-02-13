@@ -16,8 +16,19 @@
                 var data = JSON.parse(e.data);
                 var message = data['message'];
                 var obj_user = data['obj_user']
+                var usr_id = data['id_user']
+                var file = data['file']
+                console.log(file)
                 if (message != "") {
-                $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + message + "<br></div>");
+                    $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + message + "<br></div>");
+                }
+                if (file != ""){
+                    $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + "<a href=" + file + ">"+ file +"<br>")
+                }
+                if (usr_id != id_user) {
+                    $(".msg").addClass("new-msg");
+                } else {
+                    $(".msg").removeClass();
                 }
                 scrollfunc();
             };
@@ -28,17 +39,35 @@
                 }
             };
 
+            $(document).click(function(e) {
+                $(".msg").removeClass();})
+
             document.querySelector('#chat-message-submit' + '-' + type).onclick = function(e) {
             var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
             var message = messageInputDom.value;
             if (message != "") {
             chatSocket.send(JSON.stringify({
+                'file': "",
                 'message': message,
                 'id_user': id_user, 
                 'id': id,
             }));
             messageInputDom.value = '';
         };}
+
+        $(".ord").click(
+            function(){
+            string_id = $(this).attr("id")
+            array_id = string_id.split("_")
+            chatSocket.send(JSON.stringify({
+                'file': $("#file_" + array_id[2]).attr("href"),
+                'image': '',
+                'message': '',
+                'id_user': id_user, 
+                'id': id,
+
+            }));
+        })
 
         };
 
@@ -54,11 +83,21 @@
                 var message = data['message'];
                 var obj_user = data['obj_user']
                 var image = data['image']
+                var usr_id = data['id_user']
+                var file = data['file']
                 if (message != "") {
-                $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + message + "<br></div>");
+                    $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + message + "<br></div>");
                 }
                 if (image != ""){
-                $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + "<img class='img-responsive' src='/media/" + image + "'><br>");
+                    $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + "<img height='500px' src='/media/" + image + "'><br>");
+                }
+                if (file != ""){
+                    $("#chat-log" + '-' + type).append("<div class='msg'><b>" + obj_user + ":</b>" + "<br>" + "<a href=" + file + ">"+ file +"<br>")
+                }
+                if (usr_id != id_user) {
+                    $(".msg").addClass("new-msg");
+                } else {
+                    $(".msg").removeClass();
                 }
                 scrollfunc();
             };
@@ -69,6 +108,12 @@
                 }
             };
 
+            // document.querySelector('#chat-message-input' + '-' + type).onfocus = function(e) {
+            //     $(".msg").removeClass();
+            // }
+            $(document).click(function(e) {
+                        $(".msg").removeClass();})
+
             document.querySelector('#chat-message-submit' + '-' + type).onclick = function(e) {
             var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
             var message = messageInputDom.value;
@@ -78,10 +123,10 @@
                 'message': message,
                 'id_user': id_user, 
                 'id': id,
+                'file': "",
             }));
             messageInputDom.value = '';
         };}
-
             // Первый дизайн
             document.querySelector("#position_img1_to_socket").onclick = function(e){
                 var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
@@ -91,6 +136,7 @@
                 'message': message,
                 'id_user': id_user, 
                 'id': id,
+                "file": "",
 
             }));
             messageInputDom.value = '';
@@ -105,6 +151,7 @@
                 'message': message,
                 'id_user': id_user, 
                 'id': id,
+                "file": "",
 
             }));
             messageInputDom.value = '';
@@ -120,6 +167,7 @@
                 'message': message,
                 'id_user': id_user, 
                 'id': id,
+                'file': "",
 
             }));
             messageInputDom.value = '';
@@ -135,8 +183,24 @@
                 'message': message,
                 'id_user': id_user, 
                 'id': id,
+                'file': "",
 
             }));
             messageInputDom.value = '';
             };
+
+        $(".pos").click(
+            function(){
+            string_id = $(this).attr("id")
+            array_id = string_id.split("_")
+            chatSocket.send(JSON.stringify({
+                'file': $("#file_" + array_id[2]).attr("href"),
+                'image': '',
+                'message': '',
+                'id_user': id_user, 
+                'id': id,
+
+            }));
+        })
+
         }

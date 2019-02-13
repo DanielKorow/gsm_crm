@@ -584,6 +584,8 @@ class Orders_edit(View):
         adding_cost = ManagerAddingCostForm(instance=order_id)
         addagr = AddAgrForm(instance=order_id)
         context = {
+            'file_upload_form': FilesForChatForm(),               # Файлы для чата
+            'files': FilesForChat.objects.filter(order=order_id), # Файлы для чата
             'active_orders': 'active',
             'order_id': order_id,
             'order_edit': order_edit,
@@ -609,6 +611,12 @@ class Orders_edit(View):
 
     @method_decorator(permission_required('auth.manage_clients'))
     def post(self, request, pk):
+        files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+        if files_for_chat.is_valid():                                  # Файлы для чата
+            s = files_for_chat.save(commit=False)                      # Файлы для чата
+            s.order = OrderNumber.objects.get(id=pk)                   # Файлы для чата
+            s.user = request.user                                      # Файлы для чата
+            s.save()                                                   # Файлы для чата
         if 'docs' in request.POST:
             docs = AddDocForm(request.POST, request.FILES)
             if docs.is_valid():
@@ -1395,6 +1403,8 @@ class Designer_orders_edit(View):
             new_order.append(new_formset)
             l = l + 1
         context = {
+            'file_upload_form': FilesForChatForm(),               # Файлы для чата
+            'files': FilesForChat.objects.filter(order=order_id), # Файлы для чата
             'order_id': order_id,
             'active_home': 'active',
             'order_edit': order_edit,
@@ -1408,6 +1418,12 @@ class Designer_orders_edit(View):
 
     @method_decorator(permission_required('auth.designer_rw'))
     def post(self, request, pk):
+        files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+        if files_for_chat.is_valid():                                  # Файлы для чата
+            s = files_for_chat.save(commit=False)                      # Файлы для чата
+            s.order = OrderNumber.objects.get(id=order_id)             # Файлы для чата
+            s.user = request.user                                      # Файлы для чата
+            s.save()                                                   # Файлы для чата
         if 'add_order_comment' in request.POST:
             comment = OrderComment()
             comment.comment = request.POST['comment']
@@ -2521,6 +2537,8 @@ class Design(View):
         except:
             img4 = ""
         context = {
+            'file_upload_form': FilesForChatForm(),               # Файлы для чата
+            'files': FilesForChat.objects.filter(order=order_id), # Файлы для чата
             'design1': design1,
             'design2': design2,
             'design3': design3,
@@ -2538,6 +2556,13 @@ class Design(View):
 
 
     def post(self, request, order_id, position_id):
+        files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+        if files_for_chat.is_valid():                                  # Файлы для чата
+            s = files_for_chat.save(commit=False)                      # Файлы для чата
+            s.order = OrderNumber.objects.get(id=order_id)             # Файлы для чата
+            s.user = request.user                                      # Файлы для чата
+            s.save()                                                   # Файлы для чата
+
         if 'add_design1' in request.POST:
             try:
                 design1 = Design1Form(request.POST, request.FILES, instance=Design1.objects.get(position=Order.objects.get(id=position_id)))
@@ -2661,6 +2686,8 @@ class ManagerPositionDesign(View):
         except:
             img4 = ""
         context = {
+            'file_upload_form': FilesForChatForm(),               # Файлы для чата
+            'files': FilesForChat.objects.filter(order=order_id), # Файлы для чата
             'design_img1': img1,
             'design_img2': img2,
             'design_img3': img3,
@@ -2671,6 +2698,15 @@ class ManagerPositionDesign(View):
             'position_chat': NewChatPosition.objects.filter(position=position_id),
         }
         return render(request, self.template, context)
+
+    def post(self, request, order_id, position_id):
+        files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+        if files_for_chat.is_valid():                                  # Файлы для чата
+            s = files_for_chat.save(commit=False)                      # Файлы для чата
+            s.order = OrderNumber.objects.get(id=order_id)             # Файлы для чата
+            s.user = request.user                                      # Файлы для чата
+            s.save()                                                   # Файлы для чата
+        return HttpResponseRedirect(request.path)
 
 
 class ChangeClientProfileDesigner(View):
@@ -2772,3 +2808,8 @@ class ClientPositionDesign(View):
             design.confirm = True
             design.save()
         return HttpResponseRedirect(request.path)
+
+class ChatFileDelete(View):
+    def get(self, request, pk):
+        FilesForChat.objects.get(id=pk).delete()
+        return HttpResponseRedirect(request.GET.get('next'))

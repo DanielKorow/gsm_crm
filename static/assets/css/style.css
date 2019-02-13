@@ -34,3 +34,10 @@
 .new-msg {
 	background-color: #e2e2e26b;
 }
+
+.to_chat {
+	float: right; 
+	padding-left: 10px; 
+	cursor: pointer; 
+	color: green
+}

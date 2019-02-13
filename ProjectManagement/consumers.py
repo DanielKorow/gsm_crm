@@ -32,19 +32,22 @@ class OrderNumberConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         id_user = text_data_json['id_user']
         order_id = text_data_json['id'] 
-        await self.save_msg(order_id, id_user, message)
+        file = text_data_json['file']
+        await self.save_msg(order_id, id_user, message, file)
         await self.channel_layer.group_send(
             self.order_group_name,
             {
                 'type': 'chat_message',
                 'message': message,
-                'obj_user': await self.get_user(id_user)
+                'obj_user': await self.get_user(id_user),
+                'id_user': id_user,
+                'file': file
             }
         )
 
     @database_sync_to_async
-    def save_msg(self, order_id, id_user, message):
-        chat_save = NewChatOrder(order=OrderNumber.objects.get(id=order_id), message=message, user=User.objects.get(id=id_user))
+    def save_msg(self, order_id, id_user, message, file):
+        chat_save = NewChatOrder(order=OrderNumber.objects.get(id=order_id), message=message, user=User.objects.get(id=id_user), file=file)
         chat_save.save()
 
     @database_sync_to_async
@@ -56,11 +59,15 @@ class OrderNumberConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event['message']
         obj_user = event['obj_user']
+        id_user = event['id_user']
+        file = event['file']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
+            'file': file,
             'message': message,
             'obj_user': obj_user,
+            'id_user': id_user,
         }))
 
 
@@ -90,22 +97,25 @@ class PositionNumberConsumer(AsyncWebsocketConsumer):
         image = text_data_json['image']
         message = text_data_json['message']
         id_user = text_data_json['id_user']
-        order_id = text_data_json['id'] 
-        await self.save_msg(order_id, id_user, message, image)
+        order_id = text_data_json['id']
+        file = text_data_json['file']
+        await self.save_msg(order_id, id_user, message, image, file)
         await self.channel_layer.group_send(
             self.position_group_name,
             {
                 'type': 'chat_message',
                 'image': image,
                 'message': message,
+                'file': file,
                 'obj_user': await self.get_user(id_user),
+                'id_user': id_user,
             }
         )
 
 
     @database_sync_to_async
-    def save_msg(self, order_id, id_user, message, image):
-        chat_save = NewChatPosition(position=Order.objects.get(id=order_id), message=message, user=User.objects.get(id=id_user), image=image)
+    def save_msg(self, order_id, id_user, message, image, file):
+        chat_save = NewChatPosition(position=Order.objects.get(id=order_id), message=message, user=User.objects.get(id=id_user), image=image, file=file)
         chat_save.save()
 
     @database_sync_to_async
@@ -117,10 +127,14 @@ class PositionNumberConsumer(AsyncWebsocketConsumer):
         message = event['message']
         obj_user = event['obj_user']
         image = event['image']
+        id_user = event['id_user']
+        file = event['file']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'image': image,
             'message': message,
             'obj_user': obj_user,
+            'id_user': id_user,
+            'file': file,
         }))

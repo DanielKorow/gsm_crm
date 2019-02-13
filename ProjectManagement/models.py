@@ -745,3 +745,17 @@ class NewChatPosition(models.Model):
     file = models.FileField(blank=True, null=True, upload_to='chat/files/{0}/{1}'.format(user, position))
     image = models.ImageField(blank=True, null=True,upload_to='chat/images/{0}/{1}'.format(user, position))
     read = models.BooleanField(default=False)
+
+
+class FilesForChat(models.Model):
+
+    class Meta:
+        verbose_name = "FilesForChat"
+        verbose_name_plural = "FilesForChats"
+
+    def __str__(self):
+        pass
+    
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    order = models.ForeignKey(OrderNumber, on_delete=models.SET_NULL, null=True, blank=True)
+    file = models.FileField()
