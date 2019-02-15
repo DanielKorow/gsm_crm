@@ -87,13 +87,46 @@
                                     </div>
                                 </div>
                             </div>
+
+
+                            <script>
+                                function view2(divId){
+                                    v = $(divId);
+                                    if(v.css("display") === 'none') {
+                                        v.show();
+                                    }
+                                    else {
+                                         v.hide();
+                                    }
+                                    }
+                            </script>
                             
                             <!-- Файлы для чата -->
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="panel">
-                                        <div class="panel-heading">
-                                            <h4>Файлы для чата:</h4>
+                                        <div class="panel-heading" onclick="view2('.chat_files_list')" style="cursor: pointer;">
+                                            Загрузить файл для чата:
+                                        </div>
+                                        <div class="chat_files_list panel-body" style="display: none;">
+                                            <div class="row" style="height: 100%;">
+                                                <form method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                <div class="col-md-6">
+                                                    {{file_upload_form.file}} 
+                                                </div>
+                                                <div class="col-md-6 text-right">
+                                                    <button>Отправить</button>
+                                                </div>
+                                                </form>
+                                            </div>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="panel chat_files_list" style="display: none;">
+                                        <div class="panel-heading" onclick="view2('.chat_files_list')" style="cursor: pointer;">
+                                            Файлы для чата:
                                         </div>
                                         <div class="panel-body">
                                             <div class="table-responsive">
@@ -120,26 +153,6 @@
                                             </div>
                                         </div>
                                     </div>   
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="panel">
-                                        <div class="panel-heading">
-                                            Загрузить файл для чата:
-                                        </div>
-                                        <div class="panel-body">
-                                            <div class="row" style="height: 100%;">
-                                                <form method="POST" enctype="multipart/form-data">
-                                                    {% csrf_token %}
-                                                <div class="col-md-6">
-                                                    {{file_upload_form.file}} 
-                                                </div>
-                                                <div class="col-md-6 text-right">
-                                                    <button>Отправить</button>
-                                                </div>
-                                                </form>
-                                            </div>                        
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         

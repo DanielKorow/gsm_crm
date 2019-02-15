@@ -2,6 +2,16 @@
 {% block content %}
 
 <script type="text/javascript">
+        function view(divId){
+        v = document.getElementById(divId);
+        if(v.style.display === 'none') {
+            v.style.display = 'block';
+        }
+        else {
+             v.style.display = 'none';
+        }
+    }
+
         $(document).ready(
         function(){
             var elem = document.getElementsByClassName('chat-scroll');
@@ -15,6 +25,7 @@
             function(){
                orderNumberChat({{order_id.id}}, 'order', '{{user.id}}');
          });
+
 </script>
             <!-- MAIN CONTENT -->
             <div class="main-content">
@@ -58,24 +69,24 @@
                                                     </th>
                                                 </tr>
                                                 {% for i in order%}
-                                                <tr class="text-center" style="cursor: pointer" onclick="location.href='/designer/design/{{order_id.id}}/{{i.id}}'">
-                                                    <td style="vertical-align: middle;">
+                                                <tr class="text-center" style="cursor: pointer">
+                                                    <td style="vertical-align: middle;" onclick="location.href='/designer/design/{{order_id.id}}/{{i.id}}'">
                                                         {{ forloop.counter}}
                                                     </td>
-                                                    <td style="vertical-align: middle;">
+                                                    <td style="vertical-align: middle;" onclick="location.href='/designer/design/{{order_id.id}}/{{i.id}}'">
                                                         {{i.item}}
                                                     </td>
-                                                    <td style="vertical-align: middle;">
+                                                    <td style="vertical-align: middle;" onclick="location.href='/designer/design/{{order_id.id}}/{{i.id}}'">
                                                         {{i.app_method}}
                                                     </td>
-                                                    <td style="vertical-align: middle;">
+                                                    <td style="vertical-align: middle;" onclick="location.href='/designer/design/{{order_id.id}}/{{i.id}}'">
                                                         {{i.material}}
                                                     </td>
-                                                    <td style="vertical-align: middle;">
+                                                    <td style="vertical-align: middle;" onclick="location.href='/designer/design/{{order_id.id}}/{{i.id}}'">
                                                         {{i.production_status}}
                                                     </td>
                                                     {%if design1%}
-                                                    <td style="vertical-align: middle;">
+                                                    <td style="vertical-align: middle;" onclick="location.href='/designer/design/{{order_id.id}}/{{i.id}}'">
                                                         {{i.designer_date}}
                                                     </td>
                                                     <td style="vertical-align: middle;">
@@ -109,7 +120,17 @@
 
 
 
-
+                            <script>
+                                        function view2(divId){
+                                            v = $(divId);
+                                            if(v.css("display") === 'none') {
+                                                v.show();
+                                            }
+                                            else {
+                                                 v.hide();
+                                            }
+                                            }
+                            </script>
 
 
 
@@ -117,8 +138,28 @@
                         <div class="row">
                                 <div class="col-md-6">
                                     <div class="panel">
-                                        <div class="panel-heading">
-                                            <h4>Файлы для чата:</h4>
+                                        <div class="panel-heading" onclick="view2('.chat_files_list')" style="cursor: pointer;">
+                                            Загрузить файл для чата:
+                                        </div>
+                                        <div class="panel-body chat_files_list" style="display: none">
+                                            <div class="row" style="height: 100%;">
+                                                <form method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                <div class="col-md-6">
+                                                    {{file_upload_form.file}} 
+                                                </div>
+                                                <div class="col-md-6 text-right">
+                                                    <button>Отправить</button>
+                                                </div>
+                                                </form>
+                                            </div>                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="panel chat_files_list" style="display: none">
+                                        <div class="panel-heading" onclick="view2('.chat_files_list')" style="cursor: pointer;">
+                                            Файлы для чата:
                                         </div>
                                         <div class="panel-body">
                                             <div class="table-responsive">
@@ -142,26 +183,6 @@
                                             </div>
                                         </div>
                                     </div>   
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="panel">
-                                        <div class="panel-heading">
-                                            Загрузить файл для чата:
-                                        </div>
-                                        <div class="panel-body">
-                                            <div class="row" style="height: 100%;">
-                                                <form method="POST" enctype="multipart/form-data">
-                                                    {% csrf_token %}
-                                                <div class="col-md-6">
-                                                    {{file_upload_form.file}} 
-                                                </div>
-                                                <div class="col-md-6 text-right">
-                                                    <button>Отправить</button>
-                                                </div>
-                                                </form>
-                                            </div>                        
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 

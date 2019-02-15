@@ -127,6 +127,21 @@
             }));
             messageInputDom.value = '';
         };}
+
+            $(".pos").click(
+            function(){
+            string_id = $(this).attr("id")
+            array_id = string_id.split("_")
+            chatSocket.send(JSON.stringify({
+                'file': $("#file_" + array_id[2]).attr("href"),
+                'image': '',
+                'message': '',
+                'id_user': id_user, 
+                'id': id,
+
+            }));
+        })
+            try {
             // Первый дизайн
             document.querySelector("#position_img1_to_socket").onclick = function(e){
                 var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
@@ -141,7 +156,11 @@
             }));
             messageInputDom.value = '';
             };
+        } catch(e){
 
+        }
+
+            try {
             // Второй дизайн
             document.querySelector("#position_img2_to_socket").onclick = function(e){
                 var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
@@ -156,9 +175,12 @@
             }));
             messageInputDom.value = '';
             };
+        } catch(e){
 
+        }
+
+        try {
             // Третий дизайн
-
             document.querySelector("#position_img3_to_socket").onclick = function(e){
                 var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
                 var message = messageInputDom.value;
@@ -172,9 +194,12 @@
             }));
             messageInputDom.value = '';
             };
+        } catch(e){
 
+        }
+
+            try {
             // Четвертый дизайн
-
             document.querySelector("#position_img4_to_socket").onclick = function(e){
                 var messageInputDom = document.querySelector('#chat-message-input' + '-' + type);
                 var message = messageInputDom.value;
@@ -188,19 +213,7 @@
             }));
             messageInputDom.value = '';
             };
-
-        $(".pos").click(
-            function(){
-            string_id = $(this).attr("id")
-            array_id = string_id.split("_")
-            chatSocket.send(JSON.stringify({
-                'file': $("#file_" + array_id[2]).attr("href"),
-                'image': '',
-                'message': '',
-                'id_user': id_user, 
-                'id': id,
-
-            }));
-        })
+        } catch(e){
 
         }
+    }

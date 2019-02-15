@@ -981,6 +981,8 @@ class Production_orders_edit(View):
         comments = OrderComment.objects.filter(order=order_id)
         order_status_form = OrderStatusForm(instance=order_id)
         context = {
+            'file_upload_form': FilesForChatForm(),               # Файлы для чата
+            'files': FilesForChat.objects.filter(order=order_id), # Файлы для чата
             'active_home': 'active',
             'order_id': order_id,
             'prder_status_form': order_status_form,
@@ -998,6 +1000,12 @@ class Production_orders_edit(View):
 
     @method_decorator(permission_required('auth.production_rw'))
     def post(self, request, pk):
+        files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+        if files_for_chat.is_valid():                                  # Файлы для чата
+            s = files_for_chat.save(commit=False)                      # Файлы для чата
+            s.order = OrderNumber.objects.get(id=pk)                   # Файлы для чата
+            s.user = request.user                                      # Файлы для чата
+            s.save()                                                   # Файлы для чата
         if 'docs' in request.POST:
             docs = AddDocForm(request.POST, request.FILES)
             if docs.is_valid():
@@ -1421,7 +1429,7 @@ class Designer_orders_edit(View):
         files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
         if files_for_chat.is_valid():                                  # Файлы для чата
             s = files_for_chat.save(commit=False)                      # Файлы для чата
-            s.order = OrderNumber.objects.get(id=order_id)             # Файлы для чата
+            s.order = OrderNumber.objects.get(id=pk)             # Файлы для чата
             s.user = request.user                                      # Файлы для чата
             s.save()                                                   # Файлы для чата
         if 'add_order_comment' in request.POST:
@@ -1714,6 +1722,8 @@ class LogistOrderEdit(View):
         comments = OrderComment.objects.filter(order=order_id)
         logist_price = LogistPriceForm(instance=order_id)
         context = {
+            'file_upload_form': FilesForChatForm(),               # Файлы для чата
+            'files': FilesForChat.objects.filter(order=pk), # Файлы для чата
             'active_home': 'active',
             'order_id': order_id,
             'order': order,
@@ -1731,6 +1741,12 @@ class LogistOrderEdit(View):
 
     @method_decorator(permission_required('auth.logist_rw'))
     def post(self, request, pk):
+        files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+        if files_for_chat.is_valid():                                  # Файлы для чата
+            s = files_for_chat.save(commit=False)                      # Файлы для чата
+            s.order = OrderNumber.objects.get(id=pk)                   # Файлы для чата
+            s.user = request.user                                      # Файлы для чата
+            s.save()                                                   # Файлы для чата
         if 'docs' in request.POST:
             docs = AddDocForm(request.POST, request.FILES)
             if docs.is_valid():
@@ -2652,6 +2668,8 @@ class ProductionPositionDesign(View):
         except:
             img4 = ""
         context = {
+            'file_upload_form': FilesForChatForm(),               # Файлы для чата
+            'files': FilesForChat.objects.filter(order=order_id), # Файлы для чата
             'design_img1': img1,
             'design_img2': img2,
             'design_img3': img3,
@@ -2662,6 +2680,16 @@ class ProductionPositionDesign(View):
             'position': position,
         }
         return render(request, self.template, context)
+
+
+    def post(self, request, order_id, position_id):
+        files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+        if files_for_chat.is_valid():                                  # Файлы для чата
+            s = files_for_chat.save(commit=False)                      # Файлы для чата
+            s.order = OrderNumber.objects.get(id=order_id)             # Файлы для чата
+            s.user = request.user                                      # Файлы для чата
+            s.save()                                                   # Файлы для чата
+        return HttpResponseRedirect(request.path)
 
 
 class ManagerPositionDesign(View):
@@ -2752,6 +2780,8 @@ class ClientPositionDesign(View):
         except:
             img4 = ""
         context = {
+             'file_upload_form': FilesForChatForm(),               # Файлы для чата
+            'files': FilesForChat.objects.filter(order=order_id), # Файлы для чата
             'design_img1': img1,
             'design_img2': img2,
             'design_img3': img3,
@@ -2763,6 +2793,12 @@ class ClientPositionDesign(View):
         return render(request, self.template, context)
 
     def post(self, request, order_id, position_id):
+        files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+        if files_for_chat.is_valid():                                  # Файлы для чата
+            s = files_for_chat.save(commit=False)                      # Файлы для чата
+            s.order = OrderNumber.objects.get(id=order_id)             # Файлы для чата
+            s.user = request.user                                      # Файлы для чата
+            s.save()                                                   # Файлы для чата
         if 'img1_to_chat' in request.POST:
             comment = NewChatPosition()
             design = Design1.objects.get(position=Order.objects.get(id=position_id))

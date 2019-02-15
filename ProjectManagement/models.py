@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
+from django.conf import settings
 
 
 class ClientProfile(models.Model):
@@ -37,10 +39,12 @@ class ClientDocuments(models.Model):
     def __str__(self):
         return self.file
     
+    def get_path(instance, filename):
+        return os.path.join('ClientDocuments', str(instance.client.company), filename)
 
     title = models.CharField(max_length=50)
     discription = models.CharField(max_length=3000, blank=True, null=True)
-    file = models.FileField(upload_to='ClientDocuments', null=True)
+    file = models.FileField(upload_to=get_path, null=True)
     client = models.ForeignKey(ClientProfile, on_delete=models.SET_NULL, null=True, blank=True)
 
 
@@ -517,11 +521,17 @@ class Design1(models.Model):
 
     def __str__(self):
         pass
+
+    def get_path(instance, filename):
+        return os.path.join('Production_Files', str(instance.position.client.company), filename)
+
+    def get_pic_path(instance, filename):
+        return os.path.join('Picture_design', str(instance.position.client.company), "Design_4", filename)
     
-    picture = models.ImageField(null=True, blank=True, upload_to="Picture_design/Desing_1")
+    picture = models.ImageField(null=True, blank=True, upload_to=get_pic_path)
     confirm = models.BooleanField(blank=True)
     position = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
-    pruduction_file = models.FileField(upload_to="Production_Files", blank=True, null=True)
+    pruduction_file = models.FileField(upload_to=get_path, blank=True, null=True)
 
 
 class Design1_comment(models.Model):
@@ -532,6 +542,7 @@ class Design1_comment(models.Model):
 
     def __str__(self):
         pass
+
 
     design = models.ForeignKey(Design1, on_delete=models.SET_NULL, null=True)
     picture = models.ImageField(blank=True, null=True, upload_to="Picture_comment/Desing_1")
@@ -547,11 +558,17 @@ class Design2(models.Model):
 
     def __str__(self):
         pass
+
+    def get_path(instance, filename):
+        return os.path.join('Production_Files', str(instance.position.client.company), filename)
+
+    def get_pic_path(instance, filename):
+        return os.path.join('Picture_design', str(instance.position.client.company), "Design_2", filename)
     
-    picture = models.ImageField(null=True, blank=True, upload_to="Picture_design/Desing_2")
+    picture = models.ImageField(null=True, blank=True, upload_to=get_pic_path)
     confirm = models.BooleanField(blank=True)
     position = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
-    pruduction_file = models.FileField(upload_to="Production_Files", blank=True, null=True)
+    pruduction_file = models.FileField(upload_to=get_path, blank=True, null=True)
 
 
 class Design2_comment(models.Model):
@@ -577,11 +594,17 @@ class Design3(models.Model):
 
     def __str__(self):
         pass
-    
-    picture = models.ImageField(null=True, blank=True, upload_to="Picture_design/Desing_3")
+   
+    def get_path(instance, filename):
+        return os.path.join('Production_Files', str(instance.position.client.company), filename)
+
+    def get_pic_path(instance, filename):
+        return os.path.join('Picture_design', str(instance.position.client.company), "Design_3", filename)
+
+    picture = models.ImageField(null=True, blank=True, upload_to=get_pic_path)
     confirm = models.BooleanField(blank=True)
     position = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
-    pruduction_file = models.FileField(upload_to="Production_Files", blank=True, null=True)
+    pruduction_file = models.FileField(upload_to=get_path, blank=True, null=True)
 
 
 class Design3_comment(models.Model):
@@ -608,10 +631,16 @@ class Design4(models.Model):
     def __str__(self):
         pass
     
-    picture = models.ImageField(null=True, blank=True, upload_to="Picture_design/Desing_4")
+    def get_path(instance, filename):
+        return os.path.join('Production_Files', str(instance.position.client.company), filename)
+
+    def get_pic_path(instance, filename):
+        return os.path.join('Picture_design', str(instance.position.client.company), "Design_4", filename)
+
+    picture = models.ImageField(null=True, blank=True, upload_to=get_pic_path)
     confirm = models.BooleanField(blank=True)
     position = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
-    pruduction_file = models.FileField(upload_to="Production_Files", blank=True, null=True)
+    pruduction_file = models.FileField(upload_to=get_path, blank=True, null=True)
 
 
 class Design4_comment(models.Model):
@@ -666,9 +695,12 @@ class DesignFilesForProduction(models.Model):
 
     def __str__(self):
         pass
+
+    def get_path(instance, filename):
+        return os.path.join('Production_Files', str(instance.position.client.company), filename)
     
     position = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
-    file = models.FileField()
+    file = models.FileField(upload_to=get_path)
 
 
 class ClientBrandbook(models.Model):
@@ -679,10 +711,13 @@ class ClientBrandbook(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_path(instance, filename):
+        return os.path.join('ClientBrandbooks', str(instance.client.company), filename)
     
     title = models.CharField(max_length=50)
     discription = models.CharField(max_length=3000, blank=True, null=True)
-    file = models.FileField(upload_to='ClientBrandbooks', null=True)
+    file = models.FileField(upload_to=get_path, null=True)
     client = models.ForeignKey(ClientProfile, on_delete=models.SET_NULL, null=True, blank=True)
 
 
@@ -755,7 +790,11 @@ class FilesForChat(models.Model):
 
     def __str__(self):
         pass
+
+
+    def get_path(instance, filename):
+        return os.path.join('chat_files', str(instance.order.id), filename)
     
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     order = models.ForeignKey(OrderNumber, on_delete=models.SET_NULL, null=True, blank=True)
-    file = models.FileField()
+    file = models.FileField(upload_to=get_path)

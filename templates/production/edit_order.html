@@ -188,6 +188,69 @@
 						</div>
 					</div>
 
+
+
+
+
+
+					<div class="row">
+                                <div class="col-md-6">
+                                    <div class="panel">
+                                        <div class="panel-heading">
+                                            <h4>Файлы для чата:</h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                            <table class="table">
+                                            {%for i in files%}
+                                            {%if i.user == user%}
+                                                <tr>
+                                                    <td>
+                                                        <a href="/chatfile/delete/{{i.id}}?next={{request.get_full_path|urlencode}}"><i style="float: left; padding-right: 10px;" class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                    </td>
+                                                    <td>
+                                                        <a id="file_{{forloop.counter}}" style="float: left" href="{{i.file.url}}">{{i.file}}</a>
+                                                    </td>
+                                                    <td>
+                                                        <div id="to_order_{{forloop.counter}}" class="ord to_chat">В заказ ></div> 
+                                                    </td>
+                                                </tr>
+                                            {%endif%}
+                                            {%endfor%}
+                                            </table>
+                                            </div>
+                                        </div>
+                                    </div>   
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="panel">
+                                        <div class="panel-heading">
+                                            Загрузить файл для чата:
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row" style="height: 100%;">
+                                                <form method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                <div class="col-md-6">
+                                                    {{file_upload_form.file}} 
+                                                </div>
+                                                <div class="col-md-6 text-right">
+                                                    <button>Отправить</button>
+                                                </div>
+                                                </form>
+                                            </div>                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
 					<div class="row">
                     <div class="col-md-6 new_chat_box">
                         <div class="row">
@@ -198,7 +261,12 @@
                                 <div class="chat_view_order chat-scroll" id="chat-log-order">
                                     {%for i in order_chat%}
                                         <div class=""><b>{{i.user.first_name}} {{i.user.last_name}}</b>:<br>
-                                        {{i.message}}<br></div>
+                                        {%if i.message%}
+                                        {{i.message}}<br>
+                                        {%endif%}
+                                        {%if i.file%}
+                                        <a href="{{i.file}}">{{i.file}}</a>
+                                        {%endif%}</div>
                                     {%endfor%}
                                 </div>
                             </div>
