@@ -19,8 +19,8 @@ from django.core.mail import send_mail, EmailMessage
 from django.utils.decorators import method_decorator
 from .cart import Cart_
 from django.forms.formsets import formset_factory
-
 from django.forms import modelformset_factory
+from django.http import JsonResponse
 
 
 class Installation(View):
@@ -2844,6 +2844,7 @@ class ClientPositionDesign(View):
             design.confirm = True
             design.save()
         return HttpResponseRedirect(request.path)
+
 
 class ChatFileDelete(View):
     def get(self, request, pk):
