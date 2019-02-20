@@ -1918,10 +1918,12 @@ class ClientOrders_edit(View):
         order_id = OrderNumber.objects.get(id=pk)
         order = Order.objects.filter(order=order_id)
         context = {
-             'active_home': 'active',
-             'order': order,
-             'order_id': order_id,
-             'summary': OrderNumber.objects.summary(pk),
+            'active_home': 'active',
+            'order': order,
+            'order_id': order_id,
+            'summary': OrderNumber.objects.summary(pk),
+            'pre_payment': OrderNumber.objects.pre_payment(pk),
+            'post_payment': OrderNumber.objects.post_payment(pk),
         }
         return render(request, self.template, context)
 

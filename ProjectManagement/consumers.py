@@ -99,7 +99,7 @@ class PositionNumberConsumer(AsyncWebsocketConsumer):
         id_user = text_data_json['id_user']
         order_id = text_data_json['id']
         file = text_data_json['file']
-        await self.save_msg(order_id, id_user, message, image, file)
+        await self.save_msg(order_id, id_user, message, image.replace('&quot;', '"'), file)
         await self.channel_layer.group_send(
             self.position_group_name,
             {
