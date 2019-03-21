@@ -1,6 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
 from .views import *
+from .all_views.client import *
+from .all_views.designer import *
+from .all_views.logist import *
+from .all_views.production import *
 from django.conf import settings
 from django.conf.urls.static import static
 

@@ -1,5 +1,21 @@
 {% extends 'client/base.html' %}
 {% block content %}
+<script>
+    $(document).ready(
+    function(){
+        var elem = document.getElementsByClassName('chat-scroll');
+        var i;
+        for (i in elem) {
+            elem[i].scrollTop = elem[i].scrollHeight;
+        }
+    });
+
+
+	$(document).ready(
+    function(){
+       orderNumberChat({{order_id.id}}, 'order', {{user.id}});
+    });
+</script>
 			<!-- MAIN CONTENT -->
 			<div class="main-content">
 				<div class="container-fluid">
@@ -95,6 +111,131 @@
 					<!-- END OVERVIEW -->
 				</div>
 			</div>
+
+
+				<div class="container-fluid">
+					<div class="row">
+                    <div class="col-md-6 new_chat_box">
+                        <div class="row">
+                            <div class="col-md-12" style="padding-top: 10px;">
+                                <div>
+                                   <b>Чат заказа:</b>
+                                </div>
+                                <div class="chat_view_order chat-scroll" id="chat-log-order">
+                                    {%for i in order_chat%}
+                                        <div class=""><b>{{i.user.first_name}} {{i.user.last_name}}</b>:<br>
+                                        {%if i.message%}
+                                        {{i.message}}<br>
+                                        {%endif%}
+                                        {%if i.file%}
+                                        <a href="{{i.file}}">{{i.file}}</a>
+                                        {%endif%}</div>
+                                    {%endfor%}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <input class="chat_input_and_button" id="chat-message-input-order" type="text" style="width: 100%;"/>
+                            </div>    
+                            <div class="col-md-2 text-right">
+                                <input class="chat_input_and_button" id="chat-message-submit-order" type="button" value=">>>"/>
+                            </div>
+                        </div> <br>
+                        <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel">
+                                        <div class="panel-heading" onclick="view2('.chat_files_list')" style="cursor: pointer;">
+                                            Загрузить файл для чата:
+                                        </div>
+                                        <div class="chat_files_list panel-body" style="display: none;">
+                                            <div class="row" style="height: 100%;">
+                                                <form method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                <div class="col-md-6">
+                                                    {{file_upload_form.file}} 
+                                                </div>
+                                                <div class="col-md-6 text-right">
+                                                    <button>Отправить</button>
+                                                </div>
+                                                </form>
+                                            </div>                        
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <script>
+                                function view2(divId){
+                                    v = $(divId);
+                                    if(v.css("display") === 'none') {
+                                        v.show();
+                                    }
+                                    else {
+                                         v.hide();
+                                    }
+                                    }
+                            </script>
+                                
+                                <div class="col-md-12">
+                                    <div class="panel chat_files_list" style="display: none;">
+                                        <div class="panel-heading" onclick="view2('.chat_files_list')" style="cursor: pointer;">
+                                            <h4>Файлы для чата:</h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                            <table class="table">
+                                            {%for i in files%}
+                                            {%if i.user == user%}
+                                                <tr>
+                                                    <td>
+                                                        <a href="/chatfile/delete/{{i.id}}?next={{request.get_full_path|urlencode}}"><i style="float: left; padding-right: 10px;" class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                    </td>
+                                                    <td>
+                                                        <a id="file_{{forloop.counter}}" style="float: left" href="{{i.file.url}}">{{i.file}}</a>
+                                                    </td>
+                                                    <td>
+                                                        <div id="to_order_{{forloop.counter}}" class="ord to_chat">В заказ ></div> 
+                                                    </td>
+                                                </tr>
+                                            {%endif%}
+                                            {%endfor%}
+                                            </table>
+                                            </div>
+                                        </div>
+                                    </div>   
+                                </div>
+                            </div>
+                    </div>
+                    
+<!-- 					<div class="col-md-6">
+						<div class="panel">
+							<div class="panel-heading">
+								<h3 class="panel-title">Сопроводительные документы:</h3>
+							</div>
+							<div class="panel-body">
+								{%for doc in docs%}
+									<b>{{doc.title}}</b> - <a href="/doc/delete/{{doc.id}}">Удалить</a><br>
+									<a href="{{doc.file.url}}">{{doc.file}}</a> <br>
+									<i>{{doc.discription}}</i>
+									<hr>
+								{%endfor%}
+							</div>
+							<div class="panel-footer">
+								<form method="POST" enctype="multipart/form-data">
+									{% csrf_token %}
+									{{order_edit.title}} <br>
+									{{order_edit.discription}} <br>
+									{{order_edit.file}} <br>
+										<button type="submit" class="btn btn-primary" name="docs">Отправить</button>
+								</form>
+							</div>
+						</div>
+					</div> -->
+					</div>
+				</div>
+
+
 		</div>
 
 			<!-- END MAIN CONTENT -->
