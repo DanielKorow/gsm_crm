@@ -60,12 +60,18 @@ class ClientOrders_edit(View):
     @method_decorator(permission_required('auth.client_rw'))
     def get(self, request, pk):
         order_id = OrderNumber.objects.get(id=pk)
+        order_id.mark_designer = False
+        order_id.save()
         order = Order.objects.filter(order=order_id)
+        docs = OrderDocuments.objects.filter(order=order_id)
+        order_edit = AddDocForm()
         context = {
             'file_upload_form': FilesForChatForm(),               # Файлы для чата
             'files': FilesForChat.objects.filter(order=order_id), # Файлы для чата
             'active_home': 'active',
             'order': order,
+            'docs': docs,
+            'order_edit': order_edit,
             'order_id': order_id,
             'summary': OrderNumber.objects.summary(pk),
             'pre_payment': OrderNumber.objects.pre_payment(pk),
@@ -76,140 +82,29 @@ class ClientOrders_edit(View):
 
     @method_decorator(permission_required('auth.client_rw'))
     def post(self, request, pk):
-        files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
-        if files_for_chat.is_valid():                                  # Файлы для чата
-            s = files_for_chat.save(commit=False)                      # Файлы для чата
-            s.order = OrderNumber.objects.get(id=pk)                   # Файлы для чата
-            s.user = request.user                                      # Файлы для чата
-            s.save()                                                   # Файлы для чата
-        return HttpResponseRedirect(request.path)
-
-
-class ClientPositionDesign(View):
-    template = "client/order.html"
-
-    design_formset = modelformset_factory(DesignImage, fields=('id', 'image', 'confirm', 'position'), extra=1, 
-        widgets={
-                'id': forms.TextInput(attrs={'type': 'hidden'}),
-                    })
-
-    @method_decorator(permission_required('auth.client_rw'))
-    def get(self, request, order_pk, position_pk):
-        order_id = OrderNumber.objects.get(id=order_pk)
-        order = Order.objects.filter(order=order_id).order_by('id')
-        formset = self.design_formset(queryset=DesignImage.objects.filter(position=Order.objects.get(id=position_pk)))
-        comments = DesignImageComment.objects.filter(position=Order.objects.get(id=position_pk))
-        in_production = Order.objects.get(id=position_pk)
-        try:
-            design1 = Design1Form(instance=Design1.objects.get(position=Order.objects.get(id=position_pk)))
-        except:
-            design1 = Design1Form()
-        try:
-            design2 = Design2Form(instance=Design2.objects.get(position=Order.objects.get(id=position_pk)))
-        except:
-            design2 = Design2Form()
-        try:
-            design3 = Design3Form(instance=Design3.objects.get(position=Order.objects.get(id=position_pk)))
-        except:
-            design3 = Design3Form()
-        try:
-            design4 = Design4Form(instance=Design4.objects.get(position=Order.objects.get(id=position_pk)))
-        except:
-            design4 = Design4Form()
-        upload_design = UploadDesign()
-        try: 
-            img1 = Design1.objects.get(position=Order.objects.get(id=position_pk))
-        except:
-            img1 = ""
-        try: 
-            img2 = Design2.objects.get(position=Order.objects.get(id=position_pk))
-        except:
-            img2 = ""
-        try: 
-            img3 = Design3.objects.get(position=Order.objects.get(id=position_pk))
-        except:
-            img3 = ""
-        try: 
-            img4 = Design4.objects.get(position=Order.objects.get(id=position_pk))
-        except:
-            img4 = ""
-        context = {
-            'status': str(in_production.production_status),
-            'order_id': order_id,
-            'active_home': 'active',
-            'order': order,
-            'upload_design': upload_design,
-            'design': formset,
-            'comments': comments,
-            'design1': design1,
-            'design2': design2,
-            'design3': design3,
-            'design4': design4,
-            'design_img1': img1,
-            'design_img2': img2,
-            'design_img3': img3,
-            'design_img4': img4,
-            'order_comment': OrderComment.objects.filter(order=order_id),
-            'summary': OrderNumber.objects.summary(order_pk),
-            'pre_payment': OrderNumber.objects.pre_payment(order_pk),
-            'post_payment': OrderNumber.objects.post_payment(order_pk),
-        }
-        return render(request, self.template, context)
-
-
-    @method_decorator(permission_required('auth.client_rw'))
-    def post(self, request, order_pk, position_pk):
-        if 'add_comment' in request.POST:
-            comment = DesignImageComment()
-            comment.comment = request.POST['comment']
-            comment.user = auth.get_user(request)
-            comment.position = Order.objects.get(id=position_pk)
-            comment.save()
-        if 'img1_to_chat' in request.POST:
-            comment = DesignImageComment()
-            design = Design1.objects.get(position=Order.objects.get(id=position_pk))
-            comment.design = design.picture
-            comment.user = auth.get_user(request)
-            comment.position = Order.objects.get(id=position_pk)
-            comment.save()
-        if 'img2_to_chat' in request.POST:
-            comment = DesignImageComment()
-            design = Design2.objects.get(position=Order.objects.get(id=position_pk))
-            comment.design = design.picture
-            comment.user = auth.get_user(request)
-            comment.position = Order.objects.get(id=position_pk)
-            comment.save()
-        if 'img3_to_chat' in request.POST:
-            comment = DesignImageComment()
-            design = Design3.objects.get(position=Order.objects.get(id=position_pk))
-            comment.design = design.picture
-            comment.user = auth.get_user(request)
-            comment.position = Order.objects.get(id=position_pk)
-            comment.save()
-        if 'img4_to_chat' in request.POST:
-            comment = DesignImageComment()
-            design = Design4.objects.get(position=Order.objects.get(id=position_pk))
-            comment.design = design.picture
-            comment.user = auth.get_user(request)
-            comment.position = Order.objects.get(id=position_pk)
-            comment.save()
-        if 'confirm_1' in request.POST:
-            design = Design1.objects.get(position=Order.objects.get(id=position_pk))
-            design.confirm = True
-            design.save()
-        if 'confirm_2' in request.POST:
-            design = Design2.objects.get(position=Order.objects.get(id=position_pk))
-            design.confirm = True
-            design.save()
-        if 'confirm_3' in request.POST:
-            design = Design3.objects.get(position=Order.objects.get(id=position_pk))
-            design.confirm = True
-            design.save()
-        if 'confirm_4' in request.POST:
-            design = Design4.objects.get(position=Order.objects.get(id=position_pk))
-            design.confirm = True
-            design.save()
-        return HttpResponseRedirect(request.path)
+        if 'file_for_chat' in request.POST:
+            files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+            if files_for_chat.is_valid():                                  # Файлы для чата
+                s = files_for_chat.save(commit=False)                      # Файлы для чата
+                s.order = OrderNumber.objects.get(id=pk)                   # Файлы для чата
+                s.user = request.user                                      # Файлы для чата
+                s.save()                                                   # Файлы для чата
+        # files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+        # if files_for_chat.is_valid():                                  # Файлы для чата
+        #     s = files_for_chat.save(commit=False)                      # Файлы для чата
+        #     s.order = OrderNumber.objects.get(id=pk)                   # Файлы для чата
+        #     s.user = request.user                                      # Файлы для чата
+        #     s.save()                                                   # Файлы для чата
+        if 'docs' in request.POST:
+            docs = AddDocForm(request.POST, request.FILES)
+            if docs.is_valid():
+                doc = OrderDocuments()
+                doc.title = docs.cleaned_data['title']
+                doc.discription = docs.cleaned_data['discription']
+                doc.file = docs.cleaned_data['file']
+                doc.order = OrderNumber.objects.get(id=pk)
+                doc.save()
+        return HttpResponseRedirect(request.path)       
 
 
 class ClientSelfProfile(View):
@@ -277,6 +172,8 @@ class ClientPositionDesign(View):
 
     def get(self, request, order_id, position_id):
         position = Order.objects.get(id=position_id)
+        position.mark_designer = False
+        position.save()
         try: 
             img1 = Design1.objects.get(position=Order.objects.get(id=position_id))
         except:
@@ -294,7 +191,7 @@ class ClientPositionDesign(View):
         except:
             img4 = ""
         context = {
-             'file_upload_form': FilesForChatForm(),               # Файлы для чата
+            'file_upload_form': FilesForChatForm(),               # Файлы для чата
             'files': FilesForChat.objects.filter(order=order_id), # Файлы для чата
             'design_img1': img1,
             'design_img2': img2,
@@ -306,7 +203,17 @@ class ClientPositionDesign(View):
         }
         return render(request, self.template, context)
 
+    # Почемаем клиентом что есть изменения
+    def mark_client(self, id):
+        order_id = OrderNumber.objects.get(id=id)
+        order_id.mark_client = True
+        order_id.save()
+
     def post(self, request, order_id, position_id):
+        self.mark_client(id=order_id)
+        order = Order.objects.get(id=position_id)
+        order.mark_client = True
+        order.save()
         files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
         if files_for_chat.is_valid():                                  # Файлы для чата
             s = files_for_chat.save(commit=False)                      # Файлы для чата

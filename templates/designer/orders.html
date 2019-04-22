@@ -26,6 +26,9 @@
 									<th>
 										Дата создания
 									</th>
+									<th>
+										
+									</th>
 								</tr>
 							{% for i in orders %}
 							{%if i.status.status == "Сдан" %}
@@ -37,7 +40,7 @@
 							{%else%}
 								<tr onclick="location.href='/designer/orders/edit/{{i.id}}'" style="cursor: pointer">
 							{%endif%}
-								<td>
+								<td class="text-center" style="padding-left: 0px; padding-right: 0px;">
 									{{forloop.counter}}
 								</td>
 								<td>
@@ -50,6 +53,11 @@
 									{{i.status}}
 								<td>
 								 	{{i.date}}
+								</td>
+								<td class="text-center" style="width: 20px; padding-left: 0px; padding-right: 0px;">
+									{%if i.mark_client%}
+									<i class="fa fa-bell-o" aria-hidden="true" style="color: #e27347;"></i>
+									{%endif%}									
 								</td>
 							</tr>
 							{% endfor %}

@@ -505,12 +505,13 @@ class Orders_edit(View):
 
     @method_decorator(permission_required('auth.manage_clients'))
     def post(self, request, pk):
-        files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
-        if files_for_chat.is_valid():                                  # Файлы для чата
-            s = files_for_chat.save(commit=False)                      # Файлы для чата
-            s.order = OrderNumber.objects.get(id=pk)                   # Файлы для чата
-            s.user = request.user                                      # Файлы для чата
-            s.save()                                                   # Файлы для чата
+        if 'file_for_chat' in request.POST:
+            files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
+            if files_for_chat.is_valid():                                  # Файлы для чата
+                s = files_for_chat.save(commit=False)                      # Файлы для чата
+                s.order = OrderNumber.objects.get(id=pk)                   # Файлы для чата
+                s.user = request.user                                      # Файлы для чата
+                s.save()                                                   # Файлы для чата
         if 'docs' in request.POST:
             docs = AddDocForm(request.POST, request.FILES)
             if docs.is_valid():

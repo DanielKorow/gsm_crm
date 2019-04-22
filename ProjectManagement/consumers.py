@@ -2,6 +2,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 from . models import *
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 from django.core import serializers
 from channels.db import database_sync_to_async
 
@@ -34,6 +35,7 @@ class OrderNumberConsumer(AsyncWebsocketConsumer):
         order_id = text_data_json['id'] 
         file = text_data_json['file']
         await self.save_msg(order_id, id_user, message, file)
+        await self.mark(id_user, order_id)
         await self.channel_layer.group_send(
             self.order_group_name,
             {
@@ -44,6 +46,21 @@ class OrderNumberConsumer(AsyncWebsocketConsumer):
                 'file': file
             }
         )
+
+    # Отметка что клиент или дизайнер внёс изменения
+    @database_sync_to_async
+    def mark(self, id_user, order_id):
+        user = User.objects.get(id=id_user)
+        groups = Group.objects.filter(user=user)
+        if groups[0].name == 'Clients':
+            order = OrderNumber.objects.get(id=order_id)
+            order.mark_client = True 
+            order.save()
+        if groups[0].name == 'Designers':
+            order = OrderNumber.objects.get(id=order_id)
+            order.mark_designer = True 
+            order.save()
+
 
     @database_sync_to_async
     def save_msg(self, order_id, id_user, message, file):
@@ -100,6 +117,7 @@ class PositionNumberConsumer(AsyncWebsocketConsumer):
         order_id = text_data_json['id']
         file = text_data_json['file']
         await self.save_msg(order_id, id_user, message, image.replace('&quot;', '"'), file)
+        await self.mark(id_user, order_id)
         await self.channel_layer.group_send(
             self.position_group_name,
             {
@@ -111,6 +129,24 @@ class PositionNumberConsumer(AsyncWebsocketConsumer):
                 'id_user': id_user,
             }
         )
+
+    # Отметка что клиент или дизайнер внёс изменения
+    @database_sync_to_async
+    def mark(self, id_user, order_id):
+        user = User.objects.get(id=id_user)
+        groups = Group.objects.filter(user=user)
+        if groups[0].name == 'Clients':
+            order = Order.objects.get(id=order_id)
+            order.order.mark_client = True
+            order.mark_client = True
+            order.order.save()
+            order.save()
+        if groups[0].name == 'Designers':
+            order = Order.objects.get(id=order_id)
+            order.order.mark_designer = True
+            order.mark_designer = True
+            order.order.save()
+            order.save()
 
 
     @database_sync_to_async

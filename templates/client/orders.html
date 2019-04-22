@@ -23,6 +23,7 @@
 									<th>
 										Дата создания
 									</th>
+									<th></th>
 								</tr>
 							{% for i in orders %}
 							<tr onclick="location.href='/client/orders/edit/{{i.id}}'" style="cursor: pointer">
@@ -37,6 +38,11 @@
 								</td>
 								<td>
 								 	{{i.date}}
+								</td>
+								<td class="text-center" style="width: 20px; padding-left: 0px; padding-right: 0px;">
+									{%if i.mark_designer%}
+									<i class="fa fa-bell-o" aria-hidden="true" style="color: #e27347;"></i>
+									{%endif%}									
 								</td>
 							</tr>
 							{% endfor %}

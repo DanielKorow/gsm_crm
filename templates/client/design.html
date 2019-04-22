@@ -150,12 +150,12 @@
                                                             {%endif%}
                                                             <div class="row">
                                                                 <div class="col-md-12 text-right">
-                                                                    {%if design_img1.confirm%}
+                                                                    {%if design_img2.confirm%}
                                                                         <i class="fa fa-check" aria-hidden="true" style="color: green;"></i>
                                                                     {%else%}
                                                                     <form id='confirm_2_form' method="POST">
                                                                         {% csrf_token %}
-                                                                        <input type="hidden" name="confirm_1">
+                                                                        <input type="hidden" name="confirm_2">
                                                                         <p class="panel-subtitle" onclick="document.getElementById('confirm_2_form').submit();" style="cursor: pointer; color: green;">Одобрить без правок <i class="fa fa-check" aria-hidden="true"></i></p>
                                                                     </form>
                                                                     {%endif%}
@@ -205,7 +205,7 @@
                                                                     {%else%}
                                                                     <form id='confirm_3_form' method="POST">
                                                                         {% csrf_token %}
-                                                                        <input type="hidden" name="confirm_1">
+                                                                        <input type="hidden" name="confirm_3">
                                                                         <p class="panel-subtitle" onclick="document.getElementById('confirm_3_form').submit();" style="cursor: pointer; color: green;">Одобрить без правок <i class="fa fa-check" aria-hidden="true"></i></p>
                                                                     </form>
                                                                     {%endif%}
@@ -254,7 +254,7 @@
                                                                     {%else%}
                                                                     <form id='confirm_4_form' method="POST">
                                                                         {% csrf_token %}
-                                                                        <input type="hidden" name="confirm_1">
+                                                                        <input type="hidden" name="confirm_4">
                                                                         <p class="panel-subtitle" onclick="document.getElementById('confirm_4_form').submit();" style="cursor: pointer; color: green;">Одобрить без правок <i class="fa fa-check" aria-hidden="true"></i></p>
                                                                     </form>
                                                                     {%endif%}

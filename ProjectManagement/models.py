@@ -207,6 +207,8 @@ class OrderNumber(models.Model):
     logist_delivering = models.IntegerField(blank=True, null=True, default=0)
     manager_addition_cost = models.IntegerField(default=0)
     add_agreement = models.CharField(blank=True, null=True, max_length=50)
+    mark_designer = models.BooleanField(default=True) # Отметка что дизайнер внёс изменения
+    mark_client = models.BooleanField(default=False) # Отметка что клиент внёс изменения
 
 
     objects = OrderNumberManager()
@@ -296,6 +298,8 @@ class Order(models.Model):
     delivering_price = models.FloatField(blank=True, null=True, default=0) # Стоимость доставки
     designer_date = models.DateField(blank=True, null=True) # Дата готовности дизайна
     provider_pre_payment = models.FloatField(blank=True, null=True, default=0) # Предоплата поставщику
+    mark_designer = models.BooleanField(default=True) # Отметка что дизайнер внёс изменения
+    mark_client = models.BooleanField(default=False) # Отметка что клиент внёс изменения
 
     def summary_entry(self):
         return self.production_purchase_price * self.quantity

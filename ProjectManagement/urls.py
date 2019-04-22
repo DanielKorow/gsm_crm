@@ -5,6 +5,7 @@ from .all_views.client import *
 from .all_views.designer import *
 from .all_views.logist import *
 from .all_views.production import *
+from .all_views.manager import *
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -71,7 +72,7 @@ urlpatterns = [
     path('designer/orders/<str:status>', login_required(Designer_orders.as_view())),
     path('designer/orders/edit/<int:pk>', login_required(Designer_orders_edit.as_view())),
     path('designer/order/<int:order_pk>/position/<int:position_pk>/design/<int:design_pk>/delete', login_required(Delete_position_design.as_view())),
-    path('designer/order/<int:order_pk>/position/<int:position_pk>', login_required(Designer_position_design.as_view())),
+    # path('designer/order/<int:order_pk>/position/<int:position_pk>', login_required(Designer_position_design.as_view())),
     path('designer/specifications', login_required(Designer_specifications.as_view())),
     path('designer/specifications/add', login_required(Designer_specifications_add.as_view())),
     path('designer/specification/remove/<int:pk>', login_required(Designer_specifications_remove.as_view())),

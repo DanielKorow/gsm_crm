@@ -117,8 +117,15 @@ class Designer_orders_edit(View):
                     'design_specification': forms.Select(attrs={'class': 'form-control input-sm'}),
                 })
 
+    # Дизайнер ознакамливается с изменениями
+    def mark_client(self, id):
+        order_id = OrderNumber.objects.get(id=id)
+        order_id.mark_client = False
+        order_id.save()
+
     @method_decorator(permission_required('auth.designer_rw'))
     def get(self, request, pk):
+        self.mark_client(id=pk)
         order_id = OrderNumber.objects.get(id=pk)
         order = Order.objects.filter(order=order_id).order_by('id')
         formset = self.order_formset(queryset=Order.objects.filter(order=order_id).order_by('id'))
@@ -143,6 +150,7 @@ class Designer_orders_edit(View):
             new_formset['post_payment']=i.post_payment
             new_formset['pre_payment']=i.pre_payment
             new_formset['production_status']=i.production_status
+            new_formset['mark_client']=i.mark_client
             new_formset['designer']=formset[l]
             new_order.append(new_formset)
             l = l + 1
@@ -160,8 +168,15 @@ class Designer_orders_edit(View):
         }
         return render(request, self.template, context)
 
+    # Дизайнер помечает что есть изменения
+    def mark_designer(self, id):
+        order_id = OrderNumber.objects.get(id=id)
+        order_id.mark_designer = True
+        order_id.save()
+
     @method_decorator(permission_required('auth.designer_rw'))
     def post(self, request, pk):
+        self.mark_designer(id=pk)
         files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
         if files_for_chat.is_valid():                                  # Файлы для чата
             s = files_for_chat.save(commit=False)                      # Файлы для чата
@@ -186,181 +201,6 @@ class Designer_orders_edit(View):
                 doc.discription = docs.cleaned_data['discription']
                 doc.file = docs.cleaned_data['file']
                 doc.order = OrderNumber.objects.get(id=pk)
-                doc.save()
-        return HttpResponseRedirect(request.path)
-
-
-class Designer_position_design(View):
-    template = 'designer/edit_order.html'
-
-    design_formset = modelformset_factory(DesignImage, fields=('id', 'image', 'confirm', 'position'), extra=1, 
-        widgets={
-                'id': forms.TextInput(attrs={'type': 'hidden'}),
-                    })
-
-    @method_decorator(permission_required('auth.designer_rw'))
-    def get(self, request, order_pk, position_pk):
-        order_id = OrderNumber.objects.get(id=order_pk)
-        order = Order.objects.filter(order=order_id).order_by('id')
-        formset = self.design_formset(queryset=DesignImage.objects.filter(position=Order.objects.get(id=position_pk)))
-        comments = DesignImageComment.objects.filter(position=Order.objects.get(id=position_pk))
-        order_edit = AddDocForm()
-        position = Order.objects.get(id=position_pk)
-        docs = FilesForProduction.objects.filter(order=order_id)
-        files = DesignFilesForProduction.objects.filter(position=position_pk)
-        try:
-            design1 = Design1Form(instance=Design1.objects.get(position=Order.objects.get(id=position_pk)))
-        except:
-            design1 = Design1Form()
-        try:
-            design2 = Design2Form(instance=Design2.objects.get(position=Order.objects.get(id=position_pk)))
-        except:
-            design2 = Design2Form()
-        try:
-            design3 = Design3Form(instance=Design3.objects.get(position=Order.objects.get(id=position_pk)))
-        except:
-            design3 = Design3Form()
-        try:
-            design4 = Design4Form(instance=Design4.objects.get(position=Order.objects.get(id=position_pk)))
-        except:
-            design4 = Design4Form()
-        upload_design = UploadDesign()
-        try: 
-            img1 = Design1.objects.get(position=Order.objects.get(id=position_pk))
-        except:
-            img1 = ""
-        try: 
-            img2 = Design2.objects.get(position=Order.objects.get(id=position_pk))
-        except:
-            img2 = ""
-        try: 
-            img3 = Design3.objects.get(position=Order.objects.get(id=position_pk))
-        except:
-            img3 = ""
-        try: 
-            img4 = Design4.objects.get(position=Order.objects.get(id=position_pk))
-        except:
-            img4 = ""
-        context = {
-            'position': position,
-            'files': files,
-            'order_id': order_id,
-            'order_edit': order_edit,
-            'docs': docs,
-            'active_home': 'active',
-            'order': order,
-            'upload_design': upload_design,
-            'design': formset,
-            'comments': comments,
-            'design1': design1,
-            'design2': design2,
-            'design3': design3,
-            'design4': design4,
-            'design_img1': img1,
-            'design_img2': img2,
-            'design_img3': img3,
-            'design_img4': img4,
-            'order_comment': OrderComment.objects.filter(order=order_id),
-            'designer_motivation': OrderNumber.objects.calculate_designer_motivation(order_pk)
-        }
-        return render(request, self.template, context)
-
-    @method_decorator(permission_required('auth.designer_rw'))
-    def post(self, request, order_pk, position_pk):
-        if 'file_id' in request.POST:
-            DesignFilesForProduction.objects.get(id=request.POST['file_id']).delete()
-        if 'change_image' in request.POST:
-            formset = self.design_formset(request.POST, request.FILES)
-            if formset.is_valid():
-                f_change = formset.save(commit=False)
-                for i in f_change:
-                    i.position = Order.objects.get(id=position_pk)
-                    i.save()
-                formset.save()
-        if 'add_comment' in request.POST:
-            comment = DesignImageComment()
-            comment.comment = request.POST['comment']
-            comment.user = auth.get_user(request)
-            comment.position = Order.objects.get(id=position_pk)
-            comment.save()
-        if 'add_order_comment' in request.POST:
-            comment = OrderComment()
-            comment.comment = request.POST['comment']
-            comment.order = OrderNumber.objects.get(id=order_pk)
-            comment.user = auth.get_user(request)
-            comment.save()
-        if 'add_design1' in request.POST:
-            try:
-                design1 = Design1Form(request.POST, request.FILES, instance=Design1.objects.get(position=Order.objects.get(id=position_pk)))
-            except: 
-                design1 = Design1Form(request.POST, request.FILES)
-            if design1.is_valid():
-                d = design1.save(commit=False)
-                d.position = Order.objects.get(id=position_pk)
-                d.save()
-        if 'add_design2' in request.POST:
-            try:
-                design2 = Design2Form(request.POST, request.FILES, instance=Design2.objects.get(position=Order.objects.get(id=position_pk)))
-            except: 
-                design2 = Design2Form(request.POST, request.FILES)
-            if design2.is_valid():
-                d = design2.save(commit=False)
-                d.position = Order.objects.get(id=position_pk)
-                d.save()
-        if 'add_design3' in request.POST:
-            try:
-                design3 = Design3Form(request.POST, request.FILES, instance=Design3.objects.get(position=Order.objects.get(id=position_pk)))
-            except: 
-                design3 = Design3Form(request.POST, request.FILES)
-            if design3.is_valid():
-                d = design3.save(commit=False)
-                d.position = Order.objects.get(id=position_pk)
-                d.save()
-        if 'add_design4' in request.POST:
-            try:
-                design4 = Design4Form(request.POST, request.FILES, instance=Design4.objects.get(position=Order.objects.get(id=position_pk)))
-            except: 
-                design4 = Design4Form(request.POST, request.FILES)
-            if design4.is_valid():
-                d = design4.save(commit=False)
-                d.position = Order.objects.get(id=position_pk)
-                d.save()
-        if 'img1_to_chat' in request.POST:
-            comment = DesignImageComment()
-            design = Design1.objects.get(position=Order.objects.get(id=position_pk))
-            comment.design = design.picture
-            comment.user = auth.get_user(request)
-            comment.position = Order.objects.get(id=position_pk)
-            comment.save()
-        if 'img2_to_chat' in request.POST:
-            comment = DesignImageComment()
-            design = Design2.objects.get(position=Order.objects.get(id=position_pk))
-            comment.design = design.picture
-            comment.user = auth.get_user(request)
-            comment.position = Order.objects.get(id=position_pk)
-            comment.save()
-        if 'img3_to_chat' in request.POST:
-            comment = DesignImageComment()
-            design = Design3.objects.get(position=Order.objects.get(id=position_pk))
-            comment.design = design.picture
-            comment.user = auth.get_user(request)
-            comment.position = Order.objects.get(id=position_pk)
-            comment.save()
-        if 'img4_to_chat' in request.POST:
-            comment = DesignImageComment()
-            design = Design4.objects.get(position=Order.objects.get(id=position_pk))
-            comment.design = design.picture
-            comment.user = auth.get_user(request)
-            comment.position = Order.objects.get(id=position_pk)
-            comment.save()
-        if 'docs' in request.POST:
-            docs = AddDocForm(request.POST, request.FILES)
-            if docs.is_valid():
-                doc = OrderDocuments()
-                doc.title = docs.cleaned_data['title']
-                doc.discription = docs.cleaned_data['discription']
-                doc.file = docs.cleaned_data['file']
-                doc.order = OrderNumber.objects.get(id=order_pk)
                 doc.save()
         return HttpResponseRedirect(request.path)
 
@@ -525,6 +365,8 @@ class Design(View):
 
     def get(self, request, order_id, position_id):
         position = Order.objects.get(id=position_id)
+        position.mark_client = False
+        position.save()
         try:
             design1 = Design1Form(instance=Design1.objects.get(position=Order.objects.get(id=position_id)))
         except:
@@ -576,8 +418,17 @@ class Design(View):
         }
         return render(request, self.template, context)
 
+    # Дизайнер помечает что есть изменения
+    def mark_designer(self, id):
+        order_id = OrderNumber.objects.get(id=id)
+        order_id.mark_designer = True
+        order_id.save()
 
     def post(self, request, order_id, position_id):
+        self.mark_designer(id=order_id)
+        order = Order.objects.get(id=position_id)
+        order.mark_designer = True
+        order.save()
         files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
         if files_for_chat.is_valid():                                  # Файлы для чата
             s = files_for_chat.save(commit=False)                      # Файлы для чата

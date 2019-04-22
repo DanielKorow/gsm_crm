@@ -67,6 +67,7 @@
                                                     <th>
                                                         Дата готовности
                                                     </th>
+                                                    <th></th>
                                                 </tr>
                                                 {% for i in order%}
                                                 <tr class="text-center" style="cursor: pointer">
@@ -96,6 +97,11 @@
                                                     <td style="vertical-align: middle;">
                                                         {{i.designer.id}}
                                                         {{i.designer.designer_date}}
+                                                    </td>
+                                                    <td style="vertical-align: middle; padding-left:0px; padding-right:0px;">
+                                                        {%if i.mark_client%}
+                                                        <i class="fa fa-bell-o" aria-hidden="true" style="color: #e27347;"></i>
+                                                        {%endif%}
                                                     </td>
                                                     {%endif%}
                                                 </tr>

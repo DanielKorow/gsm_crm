@@ -28,6 +28,7 @@
 							
 						</div>
 						<div class="panel-body">
+							<div class="table-responsive"> 
 							<table class="table table-striped table-bordered text-center">
 								<tr>
 									<th>№</th>
@@ -60,42 +61,49 @@
 									</th>
 									<th>Статус</th>
 									<th></th>
+									<th></th>
 								</tr>
 								{%for item in order%}
-									<tr>
-										<td>{{forloop.counter}}</td>
-										<td>{{item.item}}</td>
-										<td>{{item.material}}</td>
-										<td>{{item.quantity}}</td>
-										<td>
+									<tr class="text-center">
+										<td style="vertical-align: middle;">{{forloop.counter}}</td>
+										<td style="vertical-align: middle;">{{item.item}}</td>
+										<td style="vertical-align: middle;">{{item.material}}</td>
+										<td style="vertical-align: middle;">{{item.quantity}}</td>
+										<td style="vertical-align: middle;">
 											{{item.price}}
 										</td>
-										<td>
+										<td style="vertical-align: middle;">
 											{{item.summary}}
 										</td>
-										<td>
+										<td style="vertical-align: middle;">
 											{{item.pre_payment}}
 										</td>
-										<td>
+										<td style="vertical-align: middle;">
 											{{item.post_payment}}
 										</td>
-										<td>
+										<td style="vertical-align: middle;">
 											{{item.designer_date}} 
 										</td>
-										<td>
+										<td style="vertical-align: middle;">
 											{{item.production_est_date}} 
 										</td>
-										<td>
+										<td style="vertical-align: middle;">
 											{{item.sending_date}} 
 										</td>
-										<td>
+										<td style="vertical-align: middle;">
 											{{item.est_date}} 
 										</td>
-										<td>{{item.production_status}}</td>
-										<td style="text-align: center; padding-left:0px; cursor: pointer;"><a href="/client/design/{{order_id.id}}/{{item.id}}"><i class="fa fa-comments"></i> Диалог</a></td>
+										<td style="vertical-align: middle;">{{item.production_status}}</td>
+										<td style="text-align: center; padding-left:0px; padding-right:0px; cursor: pointer; vertical-align: middle;"><a href="/client/design/{{order_id.id}}/{{item.id}}"><i class="fa fa-comments"></i> Диалог</a></td>
+										<td style="vertical-align: middle; padding-left:0px; padding-right:0px;">
+											{%if item.mark_designer%}
+											<i class="fa fa-bell-o" aria-hidden="true" style="color: #e27347;"></i>
+											{%endif%}
+										</td>
 									</tr>
 								{%endfor%}
 							</table>
+							</div>
 							<p class="text-right">Сумма: <b>{{summary}} руб. </b> </p>
 							<p class="text-right">Оплачено: <b>{{pre_payment}} руб. </b> </p>
 							<p class="text-right">Остаток: <b>{{post_payment}} руб. </b> </p>
@@ -157,7 +165,7 @@
                                                     {{file_upload_form.file}} 
                                                 </div>
                                                 <div class="col-md-6 text-right">
-                                                    <button>Отправить</button>
+                                                    <button type="submit" name="file_for_chat">Отправить</button>
                                                 </div>
                                                 </form>
                                             </div>                        
@@ -208,7 +216,7 @@
                             </div>
                     </div>
                     
-<!-- 					<div class="col-md-6">
+					<div class="col-md-6">
 						<div class="panel">
 							<div class="panel-heading">
 								<h3 class="panel-title">Сопроводительные документы:</h3>
@@ -231,7 +239,7 @@
 								</form>
 							</div>
 						</div>
-					</div> -->
+					</div>
 					</div>
 				</div>
 
