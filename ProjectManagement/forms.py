@@ -68,7 +68,7 @@ class ClientsForm(forms.Form):
 
 class AddOrdersForm(forms.Form):
     item = forms.ModelChoiceField(queryset=Item.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
-    size = forms.ModelChoiceField(queryset=Size.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+    # size = forms.ModelChoiceField(queryset=Size.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
     app_method = forms.ModelChoiceField(queryset=ApplicationMethod.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
     material = forms.ModelChoiceField(queryset=Materials.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
     quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'v-model': 'quantity'}), initial=1)

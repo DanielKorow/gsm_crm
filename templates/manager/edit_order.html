@@ -1,5 +1,6 @@
 {% extends 'manager/base.html' %}
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
     $(document).ready(
     function(){
@@ -39,63 +40,112 @@
 											</div>
 											<div class="col-md-2 text-right">
 												<script>
-
-												function csrfSafeMethod(method) {
-												    // these HTTP methods do not require CSRF protection
-												    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-												}
-												$.ajaxSetup({
-												    beforeSend: function(xhr, settings) {
-												        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-												            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-												        }
-												    }
-												});
-
-												function getCookie(name) {
-												    var cookieValue = null;
-												    if (document.cookie && document.cookie != '') {
-												        var cookies = document.cookie.split(';');
-												        for (var i = 0; i < cookies.length; i++) {
-												            var cookie = jQuery.trim(cookies[i]);
-												            // Does this cookie string begin with the name we want?
-												            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-												                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-												                break;
-												            }
-												        }
-												    }
-												    return cookieValue;
-												}
-												var csrftoken = getCookie('csrftoken');
-
-												function ses() {
-													var data ={
-														client: '{{order_id.client.id}}',
-													};
-													$.ajax(
-													{
-													type: 'POST',
-													data: data,
-													dataType: 'json',
-													contentType: 'application/json; charset=utf-8',
-													}).done(
-													function(res){
-
-													}
-													).fail(
-													function(res){
-														console.log(res)
-													}
-													)
+												function add_position() {
+													element = document.getElementsByClassName('add-position-to-order')
+													if (element[0].style.display == 'none') {
+														element[0].style.display = 'block'
+													} else 
+														element[0].style.display = 'none';
 													}
 												</script>
-												<button class="btn btn-default" onclick="ses()">Уведомление клиенту</button>
+												<button class="btn btn-success addposbutton" onclick="add_position()">Добавить позицию</button>
 											</div>
 											<div class="col-md-1 text-right">
 												<button class="btn btn-warning" onclick="location.href='/manager/design/{{order_id.id}}'">Дизайн</button>
 											</div> 
 										</div> <br>
+										<div class="add-position-to-order" style="display: none;">
+											<hr>
+							<div class="row">
+								<div class="col-md-1">
+									<b>Позиция: </b>
+								</div>
+								<div class="col-md-2">
+									<b>Метод нанесения: </b>
+								</div>
+								<div class="col-md-1">
+									<b>Материал: </b>
+								</div>
+								<div class="col-md-1">
+									<b>Количество: </b>
+								</div>
+								<div class="col-md-1">
+									<b>Цена: </b>
+								</div>
+								<div class="col-md-1">
+									<b>Стоимость: </b>
+								</div>
+								<div class="col-md-1">
+									<b>Оплачено: </b>
+								</div>
+								<div class="col-md-1">
+									<b>Остаток: </b>
+								</div>
+								<div class="col-md-1">
+									<b>Комментарий: </b>
+								</div>
+								<div class="col-md-2">
+									
+								</div>	
+							</div> <br>
+								<form method='POST'>
+								<div class="row" id="summary">
+									<div class="col-md-1">
+										{{ add_item.item }}
+									</div>
+									<div class="col-md-2">
+										{{ add_item.app_method }}
+									</div>
+									<div class="col-md-1">
+										{{ add_item.material }}
+									</div>
+									<div class="col-md-1">
+										{{ add_item.quantity }}
+									</div>
+									<div class="col-md-1">
+										{{add_item.price}}
+									</div>
+									<div class="col-md-1">
+										[[ calculate() ]] руб.
+									</div>
+									<div class="col-md-1">
+										{{add_item.pre_payment}}
+									</div>
+									<div class="col-md-1">
+										[[ calculate_post() ]] руб.
+									</div>
+									<div class="col-md-1">
+										{{ add_item.info }}
+									</div>
+									<div class="col-md-2 text-right">									
+											{% csrf_token %}
+											<button type="submit" class="btn btn-info" name="add_position">
+												<i class="fa fa-plus-square"></i> Добавить</button>
+									</div>	
+								</div>
+								</form>
+								<script type="text/javascript">
+									var app = new Vue({
+									  delimiters: ['[[', ']]'],
+									  el: '#summary',
+									  data: { 
+									  	quantity: 1,
+									  	price: 0,
+									  	prepayment: 0,
+									  },
+									  methods: {
+									  	calculate: function() {
+									  		return this.quantity * this.price;
+									  	},
+									  	calculate_post: function() {
+									  		return this.quantity * this.price - this.prepayment;
+									  	}
+									  }
+									});
+								</script>
+								<hr>
+								</div>
+
 									<div class="table-responsive"> 
 									<table class="table table-striped table-bordered table-hover">
 										<tr>
@@ -105,9 +155,6 @@
 											<th>
 												Позиция
 											</th>
-<!-- 											<th>
-												Размер
-											</th> -->
 											<th>
 												Метод нанесения
 											</th>

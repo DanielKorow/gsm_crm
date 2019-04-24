@@ -209,6 +209,9 @@ class OrderNumber(models.Model):
     add_agreement = models.CharField(blank=True, null=True, max_length=50)
     mark_designer = models.BooleanField(default=True) # Отметка что дизайнер внёс изменения
     mark_client = models.BooleanField(default=False) # Отметка что клиент внёс изменения
+    mark_manager = models.BooleanField(default=False) # Отметка что менеджер внёс изменения
+    mark_production = models.BooleanField(default=False) # Отметка что продакшн внёс изменения
+    mark_logist = models.BooleanField(default=False) # Отметка что логист внёс изменения
 
 
     objects = OrderNumberManager()
@@ -272,7 +275,7 @@ class Order(models.Model):
 
 
     client = models.ForeignKey(ClientProfile, on_delete=models.SET_NULL, null=True) # Клиент
-    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True) # Позиция, связь
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, blank=True) # Позиция, связь
     material = models.ForeignKey(Materials, on_delete=models.SET_NULL, null=True, blank=True) # Материал
     app_method = models.ForeignKey(ApplicationMethod, on_delete=models.SET_NULL, null=True, blank=True) # Метод нанесения
     order = models.ForeignKey(OrderNumber, on_delete=models.SET_NULL, null=True) # Заказ, связь

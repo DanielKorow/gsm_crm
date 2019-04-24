@@ -447,6 +447,7 @@ class Orders_add(View):
         return HttpResponseRedirect(request.path)
         
 
+# Удаление позиции из корзины
 class Position_remove(View):
 
     @method_decorator(permission_required('auth.manage_clients'))
@@ -455,7 +456,7 @@ class Position_remove(View):
         cart.remove_position(pk)
         return HttpResponseRedirect('/manager/orders/add/{0}'.format(client))
 
-
+# Удаление позици из заказа
 class OrderPosition_remove(View):
 
     @method_decorator(permission_required('auth.manage_clients'))
@@ -473,11 +474,13 @@ class Orders_edit(View):
         order_id = OrderNumber.objects.get(id=pk)
         order = Order.objects.filter(order=order_id)
         order_edit = AddDocForm()
+        add_item_form = AddOrdersForm()
         docs = OrderDocuments.objects.filter(order=order_id)
         comments = OrderComment.objects.filter(order=order_id)
         adding_cost = ManagerAddingCostForm(instance=order_id)
         addagr = AddAgrForm(instance=order_id)
         context = {
+            'add_item': add_item_form,
             'file_upload_form': FilesForChatForm(),               # Файлы для чата
             'files': FilesForChat.objects.filter(order=order_id), # Файлы для чата
             'active_orders': 'active',
@@ -535,13 +538,31 @@ class Orders_edit(View):
             addagr = AddAgrForm(request.POST, instance=OrderNumber.objects.get(id=pk))
             if addagr.is_valid():
                 addagr.save()
+        if 'add_position' in request.POST:
+            add_item_form = AddOrdersForm(request.POST)
+            order = OrderNumber.objects.get(id=pk)
+            f = open('forms_errors', 'w')
+            f.write(str(add_item_form.errors.as_data()))
+            f.close()
+            if add_item_form.is_valid():
+                position = Order()
+                position.item = add_item_form.cleaned_data['item']
+                position.app_method = add_item_form.cleaned_data['app_method']
+                position.material = add_item_form.cleaned_data['material']
+                position.quantity = add_item_form.cleaned_data['quantity']
+                position.pre_payment = add_item_form.cleaned_data['pre_payment']
+                position.price = add_item_form.cleaned_data['price']
+                position.info = add_item_form.cleaned_data['info']
+                position.order = order
+                position.save()
         return HttpResponseRedirect(request.path)
 
 
 class Change_order(View):
 
     template = 'manager/change_order.html'
-    order_formset = modelformset_factory(Order, fields=('id', 'price', 'pre_payment', 'quantity' , 'info', 'production_purchase_price'), 
+    order_formset = modelformset_factory(Order, fields=('id', 'item', 'price', 'pre_payment', 'quantity' , 'info', 'production_purchase_price', 'app_method', 
+        'material'), 
         widgets={
                     'id': forms.TextInput(attrs={'type': 'hidden'}),
                     'price': forms.NumberInput(attrs={'class': 'form-control'}), 
@@ -549,6 +570,9 @@ class Change_order(View):
                     'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
                     'info': forms.TextInput(attrs={'class': 'form-control'}),
                     'production_purchase_price': forms.NumberInput(attrs={'class': 'form-control'}),
+                    'app_method': forms.Select(attrs={'class': 'form-control input-sm'}),
+                    'material': forms.Select(attrs={'class': 'form-control input-sm'}),
+                    'item': forms.Select(attrs={'class': 'form-control input-sm'}),
                 })
 
     @method_decorator(permission_required('auth.manage_clients'))
@@ -561,10 +585,10 @@ class Change_order(View):
         for i in order:
             new_formset = {}
             new_formset['id']=i.id
-            new_formset['item']=i.item
-            new_formset['size']=i.size
-            new_formset['app_method']=i.app_method
-            new_formset['material']=i.material
+            # new_formset['item']=i.item
+            # new_formset['size']=i.size
+            # new_formset['app_method']=i.app_method
+            # new_formset['material']=i.material
             new_formset['production_purchase_price']=i.production_purchase_price
             new_formset['summary']=i.summary
             new_formset['summary_entry']=i.summary_entry
@@ -589,6 +613,9 @@ class Change_order(View):
     def post(self, request, pk):
         formset = self.order_formset(request.POST)
         if 'save' in request.POST:
+            f = open('forms_errors', 'w')
+            f.write(str(formset.errors))
+            f.close()
             if formset.is_valid():
                 formset.save()
         return HttpResponseRedirect('/manager/orders/edit/{0}'.format(pk))

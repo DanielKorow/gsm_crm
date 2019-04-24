@@ -15,7 +15,8 @@
 									<form method="POST" class='text-right'>
 										{{formset.management_form}}
 										{% csrf_token %}
-									<table class="table table-striped table-bordered table-hover">
+									<div class="table-responsive"> 
+									<table class="table table-striped table-bordered table-hover text-center">
 										<tr>
 											<th>
 												№
@@ -69,59 +70,59 @@
 										</tr>
 										{% for i in order%}
 										<tr>
-											<td>
+											<td style="vertical-align: middle;">
 												{{ forloop.counter}}
 											</td>
-											<td>
-												{{i.item}}
+											<td style="vertical-align: middle;">
+												{{i.price.item}}
 											</td>
 <!-- 											<td>
 												{{i.size}}
 											</td> -->
-											<td>
-												{{i.app_method}}
+											<td style="vertical-align: middle;">
+												{{i.price.app_method}}
 											</td>
-											<td>
-												{{i.material}}
+											<td style="vertical-align: middle;">
+												{{i.price.material}}
 											</td>
-											<td>
+											<td style="vertical-align: middle;">
 												{{i.price.info}}
 											</td>
-											<td>
+											<td style="vertical-align: middle;">
 												{{i.price.id}}
 												{{i.price.quantity}}
 											</td>
-											<td>
+											<td style="vertical-align: middle;">
 												{{i.price.production_purchase_price}}
 											</td>
-											<td>
+											<td style="vertical-align: middle;">
 												{{i.price.price}}
 											</td>
-											<td>
+											<td style="vertical-align: middle;">
 												{{i.summary_entry}}
 											</td>
-											<td>
+											<td style="vertical-align: middle;">
 												{{i.summary}}
-											</td>
-											
-											<td>
+											</td>											
+											<td style="vertical-align: middle;">
 												{{i.price.pre_payment}}
 											</td>
-											<td>
+											<td style="vertical-align: middle;">
 												{{i.post_payment}}
 											</td>
-											<td>
+											<td style="vertical-align: middle;">
 												{{i.provider}}
 											</td>
-											<td>
+											<td style="vertical-align: middle;">
 												{{i.production_status}}
 											</td>
-											<td> 
-												<a href="/manager/order/position/remove/{{order_id.id}}/{{ i.id }}">Удалить</a>
+											<td style="vertical-align: middle; padding-left: 8px;"> 
+												<a href="/manager/order/position/remove/{{order_id.id}}/{{ i.id }}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 											</td>
 										</tr>
 										{% endfor %}
 									</table>
+									</div>
 										<button type='submit' class='btn btn-primary' name='save'>Сохранить</button>
 									</form>	<br>
 								<!-- <div class="text-right">
