@@ -95,8 +95,15 @@ class ShippingCompanies_delete(View):
 class LogistOrderEdit(View):
     template = 'logist/logist_order_edit.html'
 
+    # Логист ознакамливается с изменениями
+    def mark_client(self, id):
+        order_id = OrderNumber.objects.get(id=id)
+        order_id.mark_client_for_logist = False
+        order_id.save()
+
     @method_decorator(permission_required('auth.logist_rw'))
     def get(self, request, pk):
+        self.mark_client(id=pk)
         order_id = OrderNumber.objects.get(id=pk)
         order = Order.objects.filter(order=order_id).order_by('id')
         order_edit = AddDocForm()
@@ -120,6 +127,12 @@ class LogistOrderEdit(View):
             'order_chat': NewChatOrder.objects.filter(order=order_id),
         }
         return render(request, self.template, context)
+
+    # Логист помечает что есть изменения
+    def mark_manager(self, id):
+        order_id = OrderNumber.objects.get(id=id)
+        order_id.mark_logist = True
+        order_id.save()
 
     @method_decorator(permission_required('auth.logist_rw'))
     def post(self, request, pk):

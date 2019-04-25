@@ -55,10 +55,25 @@ class OrderNumberConsumer(AsyncWebsocketConsumer):
         if groups[0].name == 'Clients':
             order = OrderNumber.objects.get(id=order_id)
             order.mark_client = True
+            order.mark_client_for_manager = True
+            order.mark_client_for_logist = True
+            order.mark_client_for_production = True
             order.save()
         if groups[0].name == 'Designers':
             order = OrderNumber.objects.get(id=order_id)
             order.mark_designer = True 
+            order.save()
+        if groups[0].name == 'Managers':
+            order = OrderNumber.objects.get(id=order_id)
+            order.mark_manager = True 
+            order.save()
+        if groups[0].name == 'Productions':
+            order = OrderNumber.objects.get(id=order_id)
+            order.mark_production = True 
+            order.save()
+        if groups[0].name == 'Logists':
+            order = OrderNumber.objects.get(id=order_id)
+            order.mark_logist = True 
             order.save()
 
 

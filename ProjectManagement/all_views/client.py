@@ -61,6 +61,9 @@ class ClientOrders_edit(View):
     def get(self, request, pk):
         order_id = OrderNumber.objects.get(id=pk)
         order_id.mark_designer = False
+        order_id.mark_manager = False
+        order_id.mark_logist = False
+        order_id.mark_production = False
         order_id.save()
         order = Order.objects.filter(order=order_id)
         docs = OrderDocuments.objects.filter(order=order_id)

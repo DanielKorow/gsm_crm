@@ -469,8 +469,15 @@ class Orders_edit(View):
 
     template = 'manager/edit_order.html'
 
+    # Менеджер ознакамливается с изменениями
+    def mark_client(self, id):
+        order_id = OrderNumber.objects.get(id=id)
+        order_id.mark_client_for_manager = False
+        order_id.save()
+
     @method_decorator(permission_required('auth.manage_clients'))
     def get(self, request, pk):
+        self.mark_client(id=pk)
         order_id = OrderNumber.objects.get(id=pk)
         order = Order.objects.filter(order=order_id)
         order_edit = AddDocForm()
@@ -506,8 +513,15 @@ class Orders_edit(View):
         return render(request, self.template, context)
 
 
+    # Менеджер помечает что есть изменения
+    def mark_manager(self, id):
+        order_id = OrderNumber.objects.get(id=id)
+        order_id.mark_manager = True
+        order_id.save()
+
     @method_decorator(permission_required('auth.manage_clients'))
     def post(self, request, pk):
+        self.mark_manager(id=pk)
         if 'file_for_chat' in request.POST:
             files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
             if files_for_chat.is_valid():                                  # Файлы для чата

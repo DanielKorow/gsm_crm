@@ -148,8 +148,15 @@ class Production_orders_edit(View):
 
     template = 'production/edit_order.html'
 
+    # Продакшн ознакамливается с изменениями
+    def mark_client(self, id):
+        order_id = OrderNumber.objects.get(id=id)
+        order_id.mark_client_for_production = False
+        order_id.save()
+
     @method_decorator(permission_required('auth.production_rw'))
     def get(self, request, pk):
+        self.mark_client(id=pk)
         order_id = OrderNumber.objects.get(id=pk)
         order = Order.objects.filter(order=order_id)
         order_edit = AddDocForm()
@@ -174,8 +181,15 @@ class Production_orders_edit(View):
         }
         return render(request, self.template, context)
 
+    # Продакшн помечает что есть изменения
+    def mark_production(self, id):
+        order_id = OrderNumber.objects.get(id=id)
+        order_id.mark_production = True
+        order_id.save()
+
     @method_decorator(permission_required('auth.production_rw'))
     def post(self, request, pk):
+        self.mark_production(id=pk)
         files_for_chat = FilesForChatForm(request.POST, request.FILES) # Файлы для чата
         if files_for_chat.is_valid():                                  # Файлы для чата
             s = files_for_chat.save(commit=False)                      # Файлы для чата
