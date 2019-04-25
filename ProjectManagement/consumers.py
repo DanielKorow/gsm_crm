@@ -54,7 +54,7 @@ class OrderNumberConsumer(AsyncWebsocketConsumer):
         groups = Group.objects.filter(user=user)
         if groups[0].name == 'Clients':
             order = OrderNumber.objects.get(id=order_id)
-            order.mark_client = True 
+            order.mark_client = True
             order.save()
         if groups[0].name == 'Designers':
             order = OrderNumber.objects.get(id=order_id)

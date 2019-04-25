@@ -208,10 +208,13 @@ class OrderNumber(models.Model):
     manager_addition_cost = models.IntegerField(default=0)
     add_agreement = models.CharField(blank=True, null=True, max_length=50)
     mark_designer = models.BooleanField(default=True) # Отметка что дизайнер внёс изменения
-    mark_client = models.BooleanField(default=False) # Отметка что клиент внёс изменения
-    mark_manager = models.BooleanField(default=False) # Отметка что менеджер внёс изменения
     mark_production = models.BooleanField(default=False) # Отметка что продакшн внёс изменения
+    mark_manager = models.BooleanField(default=False) # Отметка что менеджер внёс изменения
     mark_logist = models.BooleanField(default=False) # Отметка что логист внёс изменения
+    mark_client = models.BooleanField(default=False) # Отметка что клиент внёс изменения для дизайнера
+    mark_client_for_manager = models.BooleanField(default=False) # Отметка что клиент внёс изменения для менеджера
+    mark_client_for_logist = models.BooleanField(default=False) # Отметка что клиент внёс изменения для логиста
+    mark_client_for_production = models.BooleanField(default=False) # Отметка что клиент внёс изменения для продакшн
 
 
     objects = OrderNumberManager()
