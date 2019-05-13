@@ -536,7 +536,7 @@ class Design1(models.Model):
         return os.path.join('Production_Files', str(instance.position.client.company), filename)
 
     def get_pic_path(instance, filename):
-        return os.path.join('Picture_design', str(instance.position.client.company), "Design_4", filename)
+        return os.path.join('Picture_design', str(instance.position.client.company), "Design_1", filename)
     
     picture = models.ImageField(null=True, blank=True, upload_to=get_pic_path)
     confirm = models.BooleanField(blank=True)
