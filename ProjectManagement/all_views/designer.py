@@ -127,8 +127,8 @@ class Designer_orders_edit(View):
     def get(self, request, pk):
         self.mark_client(id=pk)
         order_id = OrderNumber.objects.get(id=pk)
-        order = Order.objects.filter(order=order_id).order_by('id')
-        formset = self.order_formset(queryset=Order.objects.filter(order=order_id).order_by('id'))
+        order = Order.objects.filter(order=order_id).order_by('item__name')
+        formset = self.order_formset(queryset=Order.objects.filter(order=order_id).order_by('item__name'))
         order_edit = AddDocForm()
         docs = FilesForProduction.objects.filter(order=order_id)
         new_order = []

@@ -568,6 +568,7 @@ class Orders_edit(View):
                 position.price = add_item_form.cleaned_data['price']
                 position.info = add_item_form.cleaned_data['info']
                 position.order = order
+                position.client = order.client
                 position.save()
         return HttpResponseRedirect(request.path)
 
